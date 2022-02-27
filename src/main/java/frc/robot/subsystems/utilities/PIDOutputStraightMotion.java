@@ -3,6 +3,7 @@ package frc.robot.subsystems.utilities;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlHelper;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlPIDController;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.RobotMap;
+
 import frc.robot.subsystems.DriveTrainMotionControl;
 
 
@@ -25,11 +26,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 * and also adjust the speed going to the wheels to drive straight
 	 *
 	 */
-	public class PIDOutputStraightMotion implements DoubleConsumer {
+
+	public class PIDOutputStraightMotion implements DoubleConsumer /*PIDOutput*/ {
+
 		
 		double maxRotationPower = 1;
 
 		private DriveTrainMotionControl m_driveTrain;
+//		private PIDSource m_TurnSource;
 //		private DoubleSupplier m_TurnSource;
 		private Gyro m_TurnSource;
 		private double m_targetAngle = 0.0d;
@@ -159,8 +163,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			}
 
 	    }
-
-		
 	    
 
 	}

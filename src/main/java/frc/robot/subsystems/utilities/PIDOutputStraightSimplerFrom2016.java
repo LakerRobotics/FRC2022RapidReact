@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * and while passing through the left to right motor powers are tweeked so it get on the desire gyro angle drive straight
  *
  */
+
 public class PIDOutputStraightSimplerFrom2016 implements DoubleConsumer/*PIDOutput*/ {
 	double m_TargetAngle = 0;
 	
@@ -50,7 +51,6 @@ public class PIDOutputStraightSimplerFrom2016 implements DoubleConsumer/*PIDOutp
 	    SmartDashboard.putNumber("RobotDriveStraitPIDOoutput Motor Output",motorPower);
 	    SmartDashboard.putNumber("RobotDriveStraitPIDOoutput RotationPower", rotationPower);
 	}
-
 
 }
 
