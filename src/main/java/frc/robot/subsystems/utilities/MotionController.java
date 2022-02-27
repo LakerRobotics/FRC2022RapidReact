@@ -34,7 +34,7 @@ public class MotionController
 	private double m_StraightTolerance;
 	private double m_TurnTolerance;
 	private double m_AngularVelocityTolerance;
-	private boolean m_PIDEnabled;
+//	private boolean m_PIDEnabled;// no longer valid, code must now do it self by calling calculate()_ in like a command.execute
 	
 	private final double TurnKp = 0.005;
 	private final double TurnKi = 0.0020;
@@ -86,23 +86,25 @@ public class MotionController
 		m_TurnTolerance = 5;// had been 0.5
 		
 		m_AngularVelocityTolerance = 15;
-		m_PIDEnabled = false;
+//		m_PIDEnabled = false;
 		
 	}
-	
+	//TODO Execute is even more missleading, change to startStraightMotion, using START instead of EXECUTE think shoudl work.
 	public boolean ExecuteStraightMotion(double distance, double maxspeed, double ramp) {
 		double targetAngle = m_DriveTrain.GetAngle();
 		return ExecuteStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
 	}
 
+	//TODO Execute missleading, use START instead of EXECUTE think shoudl work.
 	public boolean ExecuteControlledAngleDriveMotion(double distance, double maxspeed, double ramp, double targetAngle) {
 		return ExecuteStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
 	}
 	
+	//TODO Execute missleading, use START instead of EXECUTE think shoudl work.
 	private boolean ExecuteStraightMotionProvideAngle(double distance, double maxspeed, double ramp, double targetAngle)
 	{
-		if (!m_PIDEnabled)
-		{
+//		if (!m_PIDEnabled)
+//		{
 			m_targetAngle =  targetAngle;
 			m_DistanceToExceed = distance;
 			m_DriveTrain.ResetEncoders();
@@ -134,16 +136,16 @@ public class MotionController
 				return true;
 			}
 			return false;
-		}
-		return true;
+//		}
+//		return true;
 	}
 	
 	public boolean ExecuteTurnMotion(double turnToAngle)
 	{
 		//TODO to really have it turn on a Dime should monitor left to right wheel and make sure adding them goes to Zero
 		// create a forward motion PID control on that then you can get precise turning.
-		if (!m_PIDEnabled)
-		{
+//		if (!m_PIDEnabled)
+//		{
 //			m_DriveTrain.ResetGyro();
 			double start = m_DriveTrain.GetAngle();
 			
@@ -161,23 +163,23 @@ public class MotionController
 				
 				//Instantiates a new MotionControlHelper() object for the new turn segment
 				m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
-				                                                                     (DoubleSupplier) new GyroAngleAsDouble(m_TurnSource), 
-																					 (DoubleConsumer) new PIDOutputDriveTurn(m_DriveTrain));
+				                                                                      new GyroAngleAsDouble(m_TurnSource), 
+																					  new PIDOutputDriveTurn(m_DriveTrain));
 //DontThinkNeeded				m_TurnControl.setTargetDistance(m_targetAngle);
 				
 				//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
 				m_TurnPIDController = new MotionControlPIDController(TurnKp, TurnKi, TurnKd, m_AdjustRpmAsTurnHelper);
-				m_TurnPIDController.setOutputRange(-TurnMaxPower, TurnMaxPower);
+				//m_TurnPIDController.setOutputRange(-TurnMaxPower, TurnMaxPower);// No longer available would have to code ourselves, they recommoned using a function clamp
 				
 				//Turns the MotionControlPID ON and it will continue to execute by itself until told otherwise.
-				m_TurnPIDController.enable();	
-				m_PIDEnabled = true;
+				//m_TurnPIDController.enable();	
+				//m_PIDEnabled = true;
 				
 				return true;
 			}
 			return false;
-		}
-		return true;
+//		}
+//		return true;
 	}
 	
 
@@ -206,8 +208,8 @@ public class MotionController
 		double start = 0;
 
 		
-		if (!isPIDEnabled())
-		{
+//OLD		if (!isPIDEnabled())
+//OLD		{
 			double convertedDistance = m_DistanceToExceed; 	// In inches
 			double convertedSpeed = maxSpeed * 12; 	// convert from feet to inches/second
 			double convertedRamp = ramp; 			// in inches
@@ -218,9 +220,10 @@ public class MotionController
 //			m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
 //			m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_StraightSource, m_StraightRotationPIDOutput);
 			// motionControlForwardSpeed
-			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, m_TurnSource, radiusOfArc);
+			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), radiusOfArc);
 			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, 
-			                                                                            m_LineSource, m_ArcRotationPIDOutput);
+			                                                                            new EncoderDistenceAsDouble(m_LineSource),
+																						 m_ArcRotationPIDOutput);
 			
 //			//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
 //			m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
@@ -229,17 +232,18 @@ public class MotionController
 //			
 			//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
 			m_ArcDistancePIDController = new MotionControlPIDController(ArcKp, ArcKi, ArcKd, m_AdjustSpeedAsTravelArcHelper);
-			m_ArcDistancePIDController.setAbsoluteTolerance(m_StraightTolerance);
-			m_ArcDistancePIDController.setOutputRange(-arcMaxPower, arcMaxPower);
+//			m_ArcDistancePIDController.setAbsoluteTolerance(m_StraightTolerance);
+			m_ArcDistancePIDController.setTolerance(m_StraightTolerance);
+			//OLD m_ArcDistancePIDController.setOutputRange(-arcMaxPower, arcMaxPower);//No longer availalbe code has to do it itself, docs suggest using clamp
 			
 //			//Turns the MotionControlPID ON and it will continue to execute by itself until told otherwise.
 //			m_StraightDistancePIDController.enable();
 //			m_PIDEnabled = true;
 			//Turns the MotionControlPID ON and it will continue to execute on a seperate thread by itself until told otherwise.
-			m_ArcDistancePIDController.enable();
+//OLD TODO: get calulate called and do something with the next output value			m_ArcDistancePIDController.enable();
 			return true;
-		}
-		return true;
+//OLD		}
+//OLD		return true;
 	}
 	
 	public boolean isStraightMotionFinished()
@@ -274,10 +278,10 @@ public class MotionController
 		}
 		if(didExceedDistance){
 			if(m_StraightDistancePIDController != null) {
-				m_StraightDistancePIDController.disable();
-				m_StraightRotationPIDOutput.disableRotationPIDController();
+//OLD TODO: get calulate called and do something with the next output value					m_StraightDistancePIDController.disable();
+//OLD TODO: get calulate called and do something with the next output value					m_StraightRotationPIDOutput.disableRotationPIDController();
 			}
-			m_PIDEnabled = false;
+//OLD TODO: get calulate called and do something with the next output value				m_PIDEnabled = false;
 			return true;
 		}
 		return false;
@@ -291,9 +295,9 @@ public class MotionController
 		 * */
 		if (Math.abs(m_DriveTrain.GetAngle()-m_targetAngle) < m_TurnTolerance && Math.abs(m_DriveTrain.getAngularVelocity()) < m_AngularVelocityTolerance)
 		{
-			m_TurnPIDController.disable();
+//OLD TODO: get calulate called and do something with the next output value				m_TurnPIDController.disable();
 			//m_DriveTrain.ArcadeDrive(0, 0);
-			m_PIDEnabled = false;
+//OLD TODO: get calulate called and do something with the next output value				m_PIDEnabled = false;
 			return true;
 		}
 		return false;
@@ -331,34 +335,37 @@ public class MotionController
 		System.out.println("Arc - didExceedDistance = "+ didExceedDistance);
 		
 		if(didExceedDistance) {
-			m_ArcDistancePIDController.disable();
-			m_PIDEnabled = false;
+//OLD TODO: get calulate called and do something with the next output value				m_ArcDistancePIDController.disable();
+//OLD TODO: get calulate called and do something with the next output value				m_PIDEnabled = false;
 			return true;
 		}
         //Dont stop, let motion flow to next if desired			m_DriveTrain.ArcadeDrive(0, 0);
 		return false;
 	}
 
-	public boolean isPIDEnabled()
-	{
-		return m_PIDEnabled;
-	}
+//OLD TODO: get calulate called and do something with the next output value		public boolean isPIDEnabled()
+//OLD TODO: get calulate called and do something with the next output value		{
+//OLD TODO: get calulate called and do something with the next output value			return m_PIDEnabled;
+//OLD TODO: get calulate called and do something with the next output value		}
 	
 	public void DisablePIDControls()
 	{
 		if(m_TurnPIDController != null)
 		{
-			m_TurnPIDController.disable();
+			//m_TurnPIDController.disable();
+			m_TurnPIDController.disableContinuousInput();
 		}
 		
 		if(m_StraightDistancePIDController != null)
 		{
-			m_StraightDistancePIDController.disable();
-			m_StraightRotationPIDOutput.disableRotationPIDController();
+			//m_StraightDistancePIDController.disable();
+			m_StraightDistancePIDController.disableContinuousInput();
+			//m_StraightRotationPIDOutput.disableRotationPIDController();
 		}
 		
 		if(m_ArcDistancePIDController != null) {
-			m_ArcDistancePIDController.disable();
+//			m_ArcDistancePIDController.disable();
+			m_ArcDistancePIDController.disableContinuousInput();
 			//TODO
 		}
 		

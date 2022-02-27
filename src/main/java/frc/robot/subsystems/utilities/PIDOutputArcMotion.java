@@ -1,12 +1,19 @@
 package frc.robot.subsystems.utilities;
 
-import org.usfirst.frc5053.RobotBuilderLisa.subsystems.DriveTrainMotionControl;
+import java.util.function.DoubleConsumer;
 
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDController;
+import frc.robot.subsystems.DriveTrainMotionControl;
 
-	import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.function.DoubleConsumer;
+
+//import edu.wpi.first.wpilibj.PIDSource;
+import java.util.function.DoubleSupplier;
+
+//import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.math.controller.PIDController;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
  
@@ -21,7 +28,7 @@ import edu.wpi.first.wpilibj.PIDController;
 	 * 
 	 *
 	 */
-	public class PIDOutputArcMotion implements PIDOutput {
+	public class PIDOutputArcMotion implements DoubleConsumer/*PIDOutput*/ {
 		final double Kp = 0.05;//1/200; // so at denominator off in the spin-Rate (RPMP the power will reach the max
 	    final double Ki = 0.000;
 	    final double Kd = 0.0;
@@ -34,7 +41,8 @@ import edu.wpi.first.wpilibj.PIDController;
 
 		private DriveTrainMotionControl m_RobotDrive;
 //		private double Kp;
-		private PIDSource m_Gyro; 
+//		private PIDSource m_Gyro; 
+		private DoubleSupplier m_Gyro;
 //		private double m_TargetAngle;
 		private double m_RotationPower;
 		private double m_ForwardPower;
@@ -44,7 +52,7 @@ import edu.wpi.first.wpilibj.PIDController;
 		/*
 		 * arcRadius in Inches
 		 */
-		public PIDOutputArcMotion(DriveTrainMotionControl drive, PIDSource anglePIDSource, double arcRadius) {
+		public PIDOutputArcMotion(DriveTrainMotionControl drive, DoubleSupplier /*PIDSource*/ anglePIDSource, double arcRadius) {
 			//SmartDashboard.putString("DriveSpinPIDOutput", "constructor called");
 			m_RobotDrive 	= drive;
 			m_Gyro 			= anglePIDSource	;
@@ -74,8 +82,10 @@ import edu.wpi.first.wpilibj.PIDController;
 		}
 		
 		@Override
-		public synchronized void pidWrite(double forwardPower) 
-		{
+		//public synchronized void pidWrite(double forwardPower) 
+		public void accept(double forwardPower) {
+			// TODO Auto-generated method stub
+			
 		    //rotationPower
 		   	//double rotationPower = 0;
 		   	//RobotMap.driveTrainRobotDrive21.arcadeDrive(/*moveValue*/ motorPower, /*rotateValue*/ rotationPower);
@@ -131,7 +141,7 @@ import edu.wpi.first.wpilibj.PIDController;
 			return angularChangeSpeed;
 		}	
 		
-		public  PIDController createArcPIDController(PIDSource rotationInput, PIDOutput rotationPowerOutput) {
+		public  PIDController createArcPIDController(DoubleSupplier /*PIDSource*/ rotationInput, DoubleConsumer /*PIDOutput*/ rotationPowerOutput) {
 			
 
 
@@ -143,10 +153,12 @@ import edu.wpi.first.wpilibj.PIDController;
 			double targetSpin = getTargetRotationalSpeed();	        
 	        
 	        
-			PIDController localRotationSpeedPID = new PIDController(Kp,Ki,Kd, rotationInput,rotationPowerOutput);
+//			PIDController localRotationSpeedPID = new PIDController(Kp,Ki,Kd, rotationInput,rotationPowerOutput);
+			PIDController localRotationSpeedPID = new PIDController(Kp, Ki, Kd);
+			//TODO get the calculate called on  PIDController.calclate(rotationInput,rotationPowerOutput);
 		    localRotationSpeedPID.setSetpoint(targetSpin);		    
-	        localRotationSpeedPID.setOutputRange(-MaxRotationPower, MaxRotationPower);
-	        localRotationSpeedPID.enable();
+//	        localRotationSpeedPID.setOutputRange(-MaxRotationPower, MaxRotationPower);// No longer exists, have to do it manually, docs suggest using funciton clamp(..)
+//	        localRotationSpeedPID.enable(); //TODO figure out where the calcuate method is going to be called on thie PIDController
 	        
 		    return localRotationSpeedPID;
 		}
@@ -156,15 +168,15 @@ import edu.wpi.first.wpilibj.PIDController;
 			return m_ForwardPower;
 		}
 	    
-	    public void disableRotationPIDController(){
-	    	m_ArcRotationSpeedPID.disable();
-	    	//m_RotationController.free();
-	    }
-
+//OLD 	    public void disableRotationPIDController(){
+//OLD	    	m_ArcRotationSpeedPID.disable();
+//OLD	    	//m_RotationController.free();
+//OLD	    }
+	
 
 
 	    
-		private class WrapArcPIDOutput implements PIDOutput {
+		private class WrapArcPIDOutput implements DoubleConsumer /*PIDOutput*/ {
 
 	        private PIDOutputArcMotion m_RotationPowerDestination;
 
@@ -179,8 +191,14 @@ import edu.wpi.first.wpilibj.PIDController;
 	        }
 
 			@Override
-			public void pidWrite(double rotationPower) {
-				this.m_RotationPowerDestination.setRotationPower(rotationPower);
+			//public void pidWrite(double rotationPower) {
+			public void accept(double rotationPower) {
+					this.m_RotationPowerDestination.setRotationPower(rotationPower);
 			}
+
 	    }
 	}
+
+
+
+	

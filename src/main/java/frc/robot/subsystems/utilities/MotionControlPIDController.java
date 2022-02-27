@@ -26,10 +26,12 @@ public class MotionControlPIDController extends PIDController {
 	public double getRate() throws Exception
 	{
 		// Set the PIDSource to return Rate and then get the Rate.
-		m_motionControlHelper.getM_source().setPIDSourceType(PIDSourceType.kRate);
+//OLD not needed		m_motionControlHelper.getM_source().setPIDSourceType(PIDSourceType.kRate);
 // This looks like a recusive loop which is bad so 		SmartDashboard.putNumber("Motion Control Rate", this.getRate());
-		SmartDashboard.putNumber("MotionControlPIDController Rate", m_motionControlHelper.getM_source().pidGet());
-		return m_motionControlHelper.getM_source().pidGet();
+//		SmartDashboard.putNumber("MotionControlPIDController Rate", m_motionControlHelper.getM_source().pidGet());
+		SmartDashboard.putNumber("MotionControlPIDController Rate", m_motionControlHelper.getM_source().getAsDouble());
+//		return m_motionControlHelper.getM_source().pidGet();
+		return m_motionControlHelper.getM_source().getAsDouble();
 	}
 	
 //	public MotionControlHelper getMotionControlHelper()
@@ -39,29 +41,34 @@ public class MotionControlPIDController extends PIDController {
 
 	public MotionControlPIDController(double Kp, double Ki, double Kd, AdjustSpeedAsTravelHelper motionControl) 
 	{
-		super(Kp, Ki, Kd, motionControl.getM_source(), motionControl.getM_output());
+		//super(Kp, Ki, Kd, motionControl.getM_source(), motionControl.getM_output());
+		super(Kp, Ki, Kd);
+		//TODO code needs to call calculate(motionControl.getM_source(), motionControl.getM_output());
 		m_motionControlHelper = motionControl;
 		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
 	}
 	
-	public MotionControlPIDController(double Kp, double Ki, double Kd, AdjustSpeedAsTravelHelper motionControl, double period) 
-	{
-		super(Kp, Ki, Kd, motionControl.getM_source(), motionControl.getM_output(), period);
-		m_motionControlHelper = motionControl;
-		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
-	}
+//OLD	public MotionControlPIDController(double Kp, double Ki, double Kd, AdjustSpeedAsTravelHelper motionControl, double period) 
+//OLD	{
+//OLD		//super(Kp, Ki, Kd, motionControl.getM_source(), motionControl.getM_output(), period);
+//OLD		super(Kp, Ki, Kd);
+//OLD		//TODO code needs to call calculate(motionControl.getM_source(), motionControl.getM_output(), period);
+//OLD		m_motionControlHelper = motionControl;
+//OLD		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
+//OLD	}
 
-	public MotionControlPIDController(double Kp, double Ki, double Kd, double Kf, AdjustSpeedAsTravelHelper motionControl) 
-	{
-		super(Kp, Ki, Kd, Kf, motionControl.getM_source(), motionControl.getM_output());
-		m_motionControlHelper = motionControl;
-		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
-	}
+//OLD	public MotionControlPIDController(double Kp, double Ki, double Kd, double Kf, AdjustSpeedAsTravelHelper motionControl) 
+//OLD	{
+//OLD		//super(Kp, Ki, Kd, Kf, motionControl.getM_source(), motionControl.getM_output());
+//OLD		super(Kp, Ki, Kd, Kf, motionControl.getM_source(), motionControl.getM_output());
+//OLD		m_motionControlHelper = motionControl;
+//OLD		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
+//OLD	}
 
-	public MotionControlPIDController(double Kp, double Ki, double Kd, double Kf, double period, AdjustSpeedAsTravelHelper motionControl) 
-	{
-		super(Kp, Ki, Kd, Kf, motionControl.getM_source(), motionControl.getM_output(), period);
-		m_motionControlHelper = motionControl; 
-		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
-	}
+//OLD	public MotionControlPIDController(double Kp, double Ki, double Kd, double Kf, double period, AdjustSpeedAsTravelHelper motionControl) 
+//OLD	{
+//OLD		super(Kp, Ki, Kd, Kf, motionControl.getM_source(), motionControl.getM_output(), period);
+//OLD		m_motionControlHelper = motionControl; 
+//OLD		motionControl.setRegularPIDControl(this);// to let the motionControl adjust the Rate, ie do the motion control
+//OLD	}
 }

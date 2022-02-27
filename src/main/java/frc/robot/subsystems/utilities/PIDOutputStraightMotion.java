@@ -13,6 +13,7 @@ import java.util.function.DoubleConsumer;
 //	import edu.wpi.first.wpilibj.PIDSource;
 	import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -48,6 +49,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			m_RotationController = createRotationPIDController(m_targetAngle, slowRotation, (DoubleConsumer) wrappedRotationPIDOutput);
 			
 			//WrapRotationPIDInput  wrapRotationPIDInput = new WrapRotationPIDOutput(rotationPID, (PIDSource) m_gyro);
+		}
+
+		/* not sure how to have calculate be accessable by the code and make sure it is called, and what to do with the return value, which I think is roational power
+
+		*/
+		public void calculate(double currentValue, double targetValue){
+			//TODO not sure about making this the way the PID is called every cycle
+			rotationPower = m_RotationController.calculate(currentValue, targetValue);
 		}
 
 		protected synchronized double getRotationPower() 
@@ -121,7 +130,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		    return localRotationSpeedPID;
 		}
 		
-		
+	
 //OLD	    public void disableRotationPIDController()
 //OLD	    {
 //OLD	    	m_RotationController.disable(); // no longer available, since new PIDController has to have its calculate method called.
