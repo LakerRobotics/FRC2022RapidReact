@@ -9,6 +9,9 @@ import frc.robot.subsystems.utilities.MotionControlPIDController;
 import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.PIDSource;
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionController 
@@ -54,16 +57,18 @@ public class MotionController
 	private final double arcMaxPower = 0.5;
 	
 	//PIDSource m_LineSource;
-	DoubleSupplier m_LineSource;
+	//DoubleSupplier m_LineSource;
+    Encoder m_LineSource;
 	//PIDSource m_TurnSource;
-	DoubleSupplier m_TurnSource;
+	//DoubleSupplier m_TurnSource;
+	Gyro m_TurnSource;
 	
 	boolean isArcMovingForward = true;
 	boolean isStraightMovingForward = true;
 	
 	
 	
-	public MotionController(DriveTrainMotionControl driveTrainMotionControl, PIDSource distanceSource, PIDSource rotationSource)
+	public MotionController(DriveTrainMotionControl driveTrainMotionControl, Encoder distanceSource, Gyro rotationSource)
 	{
 		m_DriveTrain = driveTrainMotionControl;
 		m_LineSource = distanceSource;
@@ -112,16 +117,20 @@ public class MotionController
 			{
 				//Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
 				m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
-				m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_LineSource, m_StraightRotationPIDOutput);
+				m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
+				                                                                                 start, new EncoderDistenceAsDouble(m_LineSource), 
+																								 m_StraightRotationPIDOutput);
 				
 				//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
 				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
-				m_StraightDistancePIDController.setAbsoluteTolerance(m_StraightTolerance);
-				m_StraightDistancePIDController.setOutputRange(-StraightMaxPower, StraightMaxPower);
+//				m_StraightDistancePIDController.setAbsoluteTolerance(m_StraightTolerance);
+				m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
+//				m_StraightDistancePIDController.setOutputRange(-StraightMaxPower, StraightMaxPower);// This is removed from PIDController docs say use clamp to get this if needed
 				
-				//Turns the MotionControlPID ON and it will continue to execute by itself until told otherwise.
-				m_StraightDistancePIDController.enable();
-				m_PIDEnabled = true;
+				//OLD Turns the MotionControlPID ON and it will continue to execute by itself until told otherwise.
+				//OLD m_StraightDistancePIDController.enable();
+				//OLD m_PIDEnabled = true;
+				//TODO get calculate being called from som loop probably a command in the execute method RGT 20220227
 				return true;
 			}
 			return false;
@@ -151,7 +160,9 @@ public class MotionController
 			{
 				
 				//Instantiates a new MotionControlHelper() object for the new turn segment
-				m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, m_TurnSource, new PIDOutputDriveTurn(m_DriveTrain));
+				m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
+				                                                                     (DoubleSupplier) new GyroAngleAsDouble(m_TurnSource), 
+																					 (DoubleConsumer) new PIDOutputDriveTurn(m_DriveTrain));
 //DontThinkNeeded				m_TurnControl.setTargetDistance(m_targetAngle);
 				
 				//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
@@ -208,7 +219,8 @@ public class MotionController
 //			m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_StraightSource, m_StraightRotationPIDOutput);
 			// motionControlForwardSpeed
 			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, m_TurnSource, radiusOfArc);
-			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_LineSource, m_ArcRotationPIDOutput);
+			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, 
+			                                                                            m_LineSource, m_ArcRotationPIDOutput);
 			
 //			//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
 //			m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);

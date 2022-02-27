@@ -3,11 +3,15 @@ package frc.robot.subsystems.utilities;
 import java.lang.reflect.Method;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
+//import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+//import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.math.controller.PIDController;
+//import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.function.DoubleConsumer;
+//import edu.wpi.first.wpilibj.PIDSource;
+import java.util.function.DoubleSupplier;
+//import edu.wpi.first.wpilibj.PIDSourceType; // no replacement
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -49,7 +53,7 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
      */
     public AdjustSpeedAsTravelStartSpeedEndSpeedHelper(double aStartDistance, double aStartSpeed, 
     		                       double aEndDistance,   double aEndSpeed,
-    		                       PIDSource source, PIDOutput output)
+    		                       DoubleSupplier/*PIDSource*/ source, DoubleConsumer/*PIDOutput*/ output)
     {
     		
     	m_startDistance          = aStartDistance; // start position, in distance units for example inches or Degrees of rotation
@@ -66,8 +70,8 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
     		m_ramp = m_endSpeed - m_startSpeed / (m_endDistance-m_startDistance);
     	}
 
-    	m_output = output;
-    	m_source = source;
+//    	m_output = output;
+//    	m_source = source;
     	
     }
 

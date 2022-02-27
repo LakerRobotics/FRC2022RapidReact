@@ -3,13 +3,17 @@ package frc.robot.subsystems.utilities;
 import java.util.TimerTask;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
+//import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+//import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.math.controller.PIDController;
+//import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.function.DoubleConsumer;
+//import edu.wpi.first.wpilibj.PIDSource;
+import java.util.function.DoubleSupplier;
+//import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.BoundaryException;
+//?import edu.wpi.first.wpilibj.util.BoundaryException;
 
 public class MotionControlPIDController extends PIDController {
 	AdjustSpeedAsTravelHelper m_motionControlHelper; 

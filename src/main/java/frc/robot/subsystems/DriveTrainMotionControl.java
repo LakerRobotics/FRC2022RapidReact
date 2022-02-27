@@ -2,16 +2,18 @@
 
 
 
-import frc.robot.subsystems.utilities.MotionController;
 
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder; 
 //import edu.wpi.first.wpilibj.PIDSource;
+import java.util.function.DoubleSupplier;
 //import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+//import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import frc.robot.subsystems.utilities.MotionController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Drivetrain subsystem that extends the FRC RobotDrive class.
@@ -38,7 +40,7 @@ public class DriveTrainMotionControl extends DifferentialDrive
 //	private double m_Speed = 0.0;
 //	private final double SWING_TOLERANCE = 1.0;
 	
-	public DriveTrainMotionControl(SpeedControllerGroup leftMotorGroup, SpeedControllerGroup rightMotorGroup, Encoder leftEncoder, Encoder rightEncoder, ADXRS450_Gyro gyro)
+	public DriveTrainMotionControl(MotorControllerGroup leftMotorGroup, MotorControllerGroup rightMotorGroup, Encoder leftEncoder, Encoder rightEncoder, ADXRS450_Gyro gyro)
 	{
 		super(leftMotorGroup, rightMotorGroup);
 		
@@ -51,7 +53,7 @@ public class DriveTrainMotionControl extends DifferentialDrive
 		
 //		PIDSource robotDistanceEncoders = new PIDSourceDistance(this);
 		DoubleSupplier robotDistanceEncoders = new PIDSourceDistance(this);
-		m_MotionController = new MotionController(this, robotDistanceEncoders ,  m_Gyro);
+		m_MotionController = new MotionController(this, (Encoder) robotDistanceEncoders , (Gyro) m_Gyro);
 		
 
 		
@@ -63,6 +65,7 @@ public class DriveTrainMotionControl extends DifferentialDrive
 	
 
 	// Drive Straight
+	//=======================================
 	public void DriveDistance(double distance, double maxspeed, double ramp){
 		if(!isPIDRunning){
 			isPIDRunning = 	m_MotionController.ExecuteStraightMotion(distance, maxspeed, ramp);
@@ -97,15 +100,14 @@ public class DriveTrainMotionControl extends DifferentialDrive
 		return false;
 	}
 	
-	/*
-	 * Drive on Arc
-	 * --------------------------------------------------------------------------------------------
-	 */
+	// Drive on Arc
+	// =====================================
 	public void DriveInArc(double distance, double maxspeed, double ramp, double radius){
 		if(!isPIDRunning){
 			isPIDRunning = m_MotionController.ExecuteArcMotion(distance, maxspeed, ramp, radius);
 		}
 	}
+	
 	public boolean isArcPIDFinished(){
 		if(m_MotionController.isArcMotionFinished()){
 			isPIDRunning = false;

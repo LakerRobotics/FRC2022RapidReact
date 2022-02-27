@@ -3,7 +3,8 @@ package frc.robot.subsystems.utilities;
 import java.lang.reflect.Method;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GyroBase;
+//import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 //import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.function.DoubleConsumer;
 //import edu.wpi.first.wpilibj.PIDSource;
@@ -39,7 +40,8 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
     public AdjustSpeedAsTravelMotionControlHelper(double targetDistance, double rampUpRampDownDistance, double runningSpeed, 
     		            double initialMeasuredDistance,
 //    		            PIDSource source, PIDOutput output){
-                        DoubleSupplier source, DoubleConsumer output){
+                        DoubleSupplier source, DoubleConsumer output // used in abstract base class
+                        ){
     	m_targetDistance          = targetDistance;
     	m_rampUpRampDownDistance  = Math.abs(rampUpRampDownDistance);
     	m_runningSpeed            = runningSpeed;

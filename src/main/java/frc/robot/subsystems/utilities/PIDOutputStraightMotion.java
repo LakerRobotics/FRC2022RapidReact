@@ -12,7 +12,9 @@ import java.util.function.DoubleConsumer;
 	
 //	import edu.wpi.first.wpilibj.PIDSource;
 	import java.util.function.DoubleSupplier;
-	import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 	/**
 	 * 
@@ -27,13 +29,14 @@ import java.util.function.DoubleConsumer;
 		double maxRotationPower = 1;
 
 		private DriveTrainMotionControl m_driveTrain;
-		private DoubleSupplier m_TurnSource;
+//		private DoubleSupplier m_TurnSource;
+		private Gyro m_TurnSource;
 		private double m_targetAngle = 0.0d;
 		private double rotationPower = 0.0d;
 		private MotionControlPIDController m_RotationController;
 		
 
-		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, DoubleSupplier turnSource, double targetAngle) 
+		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
 		{
 			m_targetAngle = targetAngle;
 			m_driveTrain = drivetrain;
@@ -108,18 +111,22 @@ import java.util.function.DoubleConsumer;
 		    AdjustSpeedAsTravelHelper rotationSpeedProfile; 
 	        rotationSpeedProfile = new AdjustSpeedAsTravelMotionControlHelper(targetAngle, ramp, maxspeed, start, (DoubleSupplier) m_TurnSource, (DoubleConsumer) pidOutput);
 	        localRotationSpeedPID = new MotionControlPIDController(Kp,Ki,Kd, rotationSpeedProfile );
-	        localRotationSpeedPID.setOutputRange(-maxRotationPower, maxRotationPower);
-	        localRotationSpeedPID.setPID(Kp, Ki, Kd, 0);
-	        localRotationSpeedPID.enable();
+//	        localRotationSpeedPID.setOutputRange(-maxRotationPower, maxRotationPower);
+	        //localRotationSpeedPID.setPID(Kp, Ki, Kd, 0);
+			localRotationSpeedPID.setP(Kp);
+			localRotationSpeedPID.setI(Ki);
+			localRotationSpeedPID.setD(Kd);
+	        //localRotationSpeedPID.enable();
+//TODO			localRotationSpeedPID.;//Is there no enableing on the PID Controller, have to do that in some execute call calculat eth on the PIDController
 		    return localRotationSpeedPID;
 		}
 		
 		
-	    public void disableRotationPIDController()
-	    {
-	    	m_RotationController.disable();
-	    	//m_RotationController.free();
-	    }
+//OLD	    public void disableRotationPIDController()
+//OLD	    {
+//OLD	    	m_RotationController.disable(); // no longer available, since new PIDController has to have its calculate method called.
+//OLD	    	//m_RotationController.free();
+//OLD	    }
 	    
 	    private class WrapRotationPIDOutput implements DoubleConsumer 
 	    {
