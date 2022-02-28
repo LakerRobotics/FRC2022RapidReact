@@ -3,13 +3,20 @@ package frc.robot.subsystems.utilities;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlHelper;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlPIDController;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.RobotMap;
-import org.usfirst.frc5053.RobotBuilderLisa.subsystems.DriveTrainMotionControl;
 
-import edu.wpi.first.wpilibj.PIDOutput;
+import frc.robot.subsystems.DriveTrainMotionControl;
+
+
+//import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.function.DoubleConsumer;
 
 	
-	import edu.wpi.first.wpilibj.PIDSource;
-	import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//	import edu.wpi.first.wpilibj.PIDSource;
+	import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 	/**
 	 * 
@@ -19,18 +26,22 @@ import edu.wpi.first.wpilibj.PIDOutput;
 	 * and also adjust the speed going to the wheels to drive straight
 	 *
 	 */
-	public class PIDOutputStraightMotion implements PIDOutput {
+
+	public class PIDOutputStraightMotion implements DoubleConsumer /*PIDOutput*/ {
+
 		
 		double maxRotationPower = 1;
 
 		private DriveTrainMotionControl m_driveTrain;
-		private PIDSource m_TurnSource;
+//		private PIDSource m_TurnSource;
+//		private DoubleSupplier m_TurnSource;
+		private Gyro m_TurnSource;
 		private double m_targetAngle = 0.0d;
 		private double rotationPower = 0.0d;
 		private MotionControlPIDController m_RotationController;
 		
 
-		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, PIDSource turnSource, double targetAngle) 
+		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
 		{
 			m_targetAngle = targetAngle;
 			m_driveTrain = drivetrain;
@@ -39,9 +50,17 @@ import edu.wpi.first.wpilibj.PIDOutput;
 			double slowRotation = m_targetAngle + 90;// because we use motion control to start somewhere, and go to straight
 			WrapRotationPIDOutput wrappedRotationPIDOutput =  new WrapRotationPIDOutput(this);
 			
-			m_RotationController = createRotationPIDController(m_targetAngle, slowRotation, wrappedRotationPIDOutput);
+			m_RotationController = createRotationPIDController(m_targetAngle, slowRotation, (DoubleConsumer) wrappedRotationPIDOutput);
 			
 			//WrapRotationPIDInput  wrapRotationPIDInput = new WrapRotationPIDOutput(rotationPID, (PIDSource) m_gyro);
+		}
+
+		/* not sure how to have calculate be accessable by the code and make sure it is called, and what to do with the return value, which I think is roational power
+
+		*/
+		public void calculate(double currentValue, double targetValue){
+			//TODO not sure about making this the way the PID is called every cycle
+			rotationPower = m_RotationController.calculate(currentValue, targetValue);
 		}
 
 		protected synchronized double getRotationPower() 
@@ -56,9 +75,10 @@ import edu.wpi.first.wpilibj.PIDOutput;
 		}
 
 
+		//@Override
+		//public synchronized void pidWrite(double motorPower) 
 		@Override
-		public synchronized void pidWrite(double motorPower) 
-		{
+		public void accept(double motorPower) {
 		    //rotationPower
 		   	//double rotationPower = 0;
 		   	//RobotMap.driveTrainRobotDrive21.arcadeDrive(/*moveValue*/ motorPower, /*rotateValue*/ rotationPower); 
@@ -84,8 +104,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 
 		}
 		
-		public  MotionControlPIDController createRotationPIDController(double targetAngle, double start, PIDOutput pidOutput) 
-		{
+//		public  MotionControlPIDController createRotationPIDController(double targetAngle, double start, PIDOutput pidOutput) 
+		public  MotionControlPIDController createRotationPIDController(double targetAngle, double start, DoubleConsumer pidOutput) {
 			
 		    double ramp 	=  30; //degrees
 		    double maxspeed = 20.0*(360/60) ; //60/360 converts the first numbers which is in RPM to degrees/second
@@ -102,22 +122,26 @@ import edu.wpi.first.wpilibj.PIDOutput;
 		    MotionControlPIDController localRotationSpeedPID;
 
 		    AdjustSpeedAsTravelHelper rotationSpeedProfile; 
-	        rotationSpeedProfile = new AdjustSpeedAsTravelMotionControlHelper(targetAngle, ramp, maxspeed, start, m_TurnSource, pidOutput);
+	        rotationSpeedProfile = new AdjustSpeedAsTravelMotionControlHelper(targetAngle, ramp, maxspeed, start, (DoubleSupplier) m_TurnSource, (DoubleConsumer) pidOutput);
 	        localRotationSpeedPID = new MotionControlPIDController(Kp,Ki,Kd, rotationSpeedProfile );
-	        localRotationSpeedPID.setOutputRange(-maxRotationPower, maxRotationPower);
-	        localRotationSpeedPID.setPID(Kp, Ki, Kd, 0);
-	        localRotationSpeedPID.enable();
+//	        localRotationSpeedPID.setOutputRange(-maxRotationPower, maxRotationPower);
+	        //localRotationSpeedPID.setPID(Kp, Ki, Kd, 0);
+			localRotationSpeedPID.setP(Kp);
+			localRotationSpeedPID.setI(Ki);
+			localRotationSpeedPID.setD(Kd);
+	        //localRotationSpeedPID.enable();
+//TODO			localRotationSpeedPID.;//Is there no enableing on the PID Controller, have to do that in some execute call calculat eth on the PIDController
 		    return localRotationSpeedPID;
 		}
 		
-		
-	    public void disableRotationPIDController()
-	    {
-	    	m_RotationController.disable();
-	    	//m_RotationController.free();
-	    }
+	
+//OLD	    public void disableRotationPIDController()
+//OLD	    {
+//OLD	    	m_RotationController.disable(); // no longer available, since new PIDController has to have its calculate method called.
+//OLD	    	//m_RotationController.free();
+//OLD	    }
 	    
-	    private class WrapRotationPIDOutput implements PIDOutput 
+	    private class WrapRotationPIDOutput implements DoubleConsumer 
 	    {
 
 	        private PIDOutputStraightMotion m_RotationPowerDestination;
@@ -133,8 +157,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 	        }
 
 			@Override
-			public void pidWrite(double rotationPower) 
-			{
+//			public void pidWrite(double rotationPower) 
+			public void accept(double rotationPower) {
 				this.m_RotationPowerDestination.setRotationPower(-rotationPower); // Inverted because if your off in the positive direction then need to bring it back the other way
 			}
 

@@ -1,6 +1,8 @@
 package frc.robot.subsystems.utilities;
 
-import edu.wpi.first.wpilibj.PIDOutput;
+
+//import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.function.DoubleConsumer;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * and while passing through the left to right motor powers are tweeked so it get on the desire gyro angle drive straight
  *
  */
-public class PIDOutputStraightSimplerFrom2016 implements PIDOutput {
+
+public class PIDOutputStraightSimplerFrom2016 implements DoubleConsumer/*PIDOutput*/ {
 	double m_TargetAngle = 0;
 	
    	//TODO bring this 2016 code into 2018 Code base.  this was really good at keeping the robot on a straight line, it fights really hard it you push it to get backon the right gyro angle
@@ -35,8 +38,9 @@ public class PIDOutputStraightSimplerFrom2016 implements PIDOutput {
 	}
 
 	@Override
-	public void pidWrite(double motorPower) {
-	   	double angleReading = m_gyro.getAngle(); // get current heading
+	//public void pidWrite(double motorPower) {
+	public void accept(double motorPower) {
+		double angleReading = m_gyro.getAngle(); // get current heading
 	   	double angle = angleReading - m_TargetAngle;
 	    double rotationPower = -angle*Kp*(motorPower/Math.abs(motorPower));// the (motorPower/Math.abs(motorPower) applies the sign correctly if goint forward or backwards
 	    
