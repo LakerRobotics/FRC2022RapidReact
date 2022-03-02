@@ -125,14 +125,20 @@ private void initializeSpeedControl(CANSparkMax shooterSpark){
         shooterSpark.set(power);
     }
 
-    public void moveSpeed(double speed){
-        double rpmSpeed = speed*maxRPM;
+    public void moveSpeed(double rpmSpeed){
+//        double rpmSpeed = speed*maxRPM;
         m_pidController.setReference(rpmSpeed, CANSparkMax.ControlType.kVelocity);
         
         SmartDashboard.putNumber("ShooterSetSpeed", rpmSpeed);
         SmartDashboard.putNumber("ShooterActualSpeed", m_encoder.getVelocity());
         SmartDashboard.putNumber("ShooterMotorOutputCurrent", shooterSpark.getOutputCurrent());
 
+    }
+
+
+
+    public double getSpeed() {
+        return m_encoder.getVelocity();
     }
 
 }
