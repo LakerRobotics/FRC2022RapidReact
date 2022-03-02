@@ -55,7 +55,7 @@ public class ShooterMoveHigh extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_shooter.moveSpeed(0.6);
+        m_shooter.moveSpeed(0.73);
     }
 
     // Called once the command ends or is interrupted.

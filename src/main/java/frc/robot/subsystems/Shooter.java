@@ -75,7 +75,7 @@ private void initializeSpeedControl(CANSparkMax shooterSpark){
     // PID coefficients
     //kP = 6e-5;
     kP = 0.0018; 
-    kI = 0.0000004;
+    kI = 0.0000002;
     kD = 0; 
     kIz = 0; 
     kFF = 0.000015; 
