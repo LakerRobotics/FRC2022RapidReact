@@ -90,18 +90,18 @@ public class MotionController
 		
 	}
 	//TODO Execute is even more missleading, change to startStraightMotion, using START instead of EXECUTE think shoudl work.
-	public boolean ExecuteStraightMotion(double distance, double maxspeed, double ramp) {
+	public boolean StartStraightMotion(double distance, double maxspeed, double ramp) {
 		double targetAngle = m_DriveTrain.GetAngle();
-		return ExecuteStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
+		return StartStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
 	}
 
 	//TODO Execute missleading, use START instead of EXECUTE think shoudl work.
-	public boolean ExecuteControlledAngleDriveMotion(double distance, double maxspeed, double ramp, double targetAngle) {
-		return ExecuteStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
+	public boolean StartControlledAngleDriveMotion(double distance, double maxspeed, double ramp, double targetAngle) {
+		return StartStraightMotionProvideAngle( distance,  maxspeed,  ramp, targetAngle);
 	}
 	
 	//TODO Execute missleading, use START instead of EXECUTE think shoudl work.
-	private boolean ExecuteStraightMotionProvideAngle(double distance, double maxspeed, double ramp, double targetAngle)
+	private boolean StartStraightMotionProvideAngle(double distance, double maxspeed, double ramp, double targetAngle)
 	{
 //		if (!m_PIDEnabled)
 //		{
@@ -140,7 +140,7 @@ public class MotionController
 //		return true;
 	}
 	
-	public boolean ExecuteTurnMotion(double turnToAngle)
+	public boolean StartTurnMotion(double turnToAngle)
 	{
 		//TODO to really have it turn on a Dime should monitor left to right wheel and make sure adding them goes to Zero
 		// create a forward motion PID control on that then you can get precise turning.

@@ -124,6 +124,9 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     public void arcadeDrive(double power, double turnpower) {
         differentialDrive1.arcadeDrive(power, turnpower);
     }
+    public void tankDrive(double leftPower, double rightPower){
+        differentialDrive1.tankDrive(leftPower, rightPower);
+    }
 
 }
 

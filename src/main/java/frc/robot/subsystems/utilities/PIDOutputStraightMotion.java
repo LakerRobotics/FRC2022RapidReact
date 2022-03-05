@@ -1,5 +1,7 @@
 package frc.robot.subsystems.utilities;
 
+import frc.robot.subsystems.DriveTrain;
+
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlHelper;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlPIDController;
 //FromRudy import org.usfirst.frc5053.FRC2016Stronghold.RobotMap;
@@ -32,7 +34,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		
 		double maxRotationPower = 1;
 
-		private DriveTrainMotionControl m_driveTrain;
+		//private DriveTrainMotionControl m_driveTrain;
+		private DriveTrain m_driveTrain;
 //		private PIDSource m_TurnSource;
 //		private DoubleSupplier m_TurnSource;
 		private Gyro m_TurnSource;
@@ -41,10 +44,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		private MotionControlPIDController m_RotationController;
 		
 
-		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
+		public PIDOutputStraightMotion(DriveTrain/*DriveTrainMotionControl*/ drivetrain, Gyro turnSource, double targetAngle) 
 		{
 			m_targetAngle = targetAngle;
 			m_driveTrain = drivetrain;
+			m_TurnSource = turnSource;
+			
+			double slowRotation = m_targetAngle + 90;// because we use motion control to start somewhere, and go to straight
+			WrapRotationPIDOutput wrappedRotationPIDOutput =  new WrapRotationPIDOutput(this);
+			
+			m_RotationController = createRotationPIDController(m_targetAngle, slowRotation, (DoubleConsumer) wrappedRotationPIDOutput);
+			
+			//WrapRotationPIDInput  wrapRotationPIDInput = new WrapRotationPIDOutput(rotationPID, (PIDSource) m_gyro);
+		}
+
+		/**
+		 * OLD came whne brought 2018 code in. should be eliminated i Think once the commands are working RGT 20220305 TODO 
+		 * @param drivetrain
+		 * @param turnSource
+		 * @param targetAngle
+		 */
+		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
+		{
+			m_targetAngle = targetAngle;
+//			m_driveTrain = drivetrain; TODO GET THIS TO WORK
 			m_TurnSource = turnSource;
 			
 			double slowRotation = m_targetAngle + 90;// because we use motion control to start somewhere, and go to straight

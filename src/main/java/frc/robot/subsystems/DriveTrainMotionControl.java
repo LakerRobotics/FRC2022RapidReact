@@ -68,7 +68,7 @@ public class DriveTrainMotionControl extends DifferentialDrive
 	//=======================================
 	public void DriveDistance(double distance, double maxspeed, double ramp){
 		if(!isPIDRunning){
-			isPIDRunning = 	m_MotionController.ExecuteStraightMotion(distance, maxspeed, ramp);
+			isPIDRunning = 	m_MotionController.StartStraightMotion(distance, maxspeed, ramp);
 		}
 	}
 	public boolean isStraightPIDFinished(){
@@ -81,14 +81,14 @@ public class DriveTrainMotionControl extends DifferentialDrive
 	
 	public void DriveControlledAngle(double distance, double maxspeed, double ramp, double angle){
 		if(!isPIDRunning)
-			isPIDRunning = m_MotionController.ExecuteControlledAngleDriveMotion(distance, maxspeed, ramp, angle);
+			isPIDRunning = m_MotionController.StartControlledAngleDriveMotion(distance, maxspeed, ramp, angle);
 	}
 	
 	// Turn (piorouette)
 	//=====================================
 	public void TurnToAngle(double turnToAngle){
 		if(!isPIDRunning){
-			isPIDRunning = m_MotionController.ExecuteTurnMotion(turnToAngle);
+			isPIDRunning = m_MotionController.StartTurnMotion(turnToAngle);
 		}
 	}
 
