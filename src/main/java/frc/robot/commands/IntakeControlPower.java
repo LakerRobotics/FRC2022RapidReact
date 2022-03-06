@@ -54,9 +54,24 @@ public class IntakeControlPower extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_intake.movePower(
-            RobotContainer.getInstance().getOperatorController().getLeftX()
-        );
+        // set Power to the maximum specified by the operator controller or the driver controller
+        double intakePower = 0;
+        double operatorSpecifiedIntakePower = RobotContainer.getInstance().getOperatorController().getLeftX();
+        double driverSpecifiedIntakePower = RobotContainer.getInstance().getOperatorController().getLeftTriggerAxis();
+        
+        if( (operatorSpecifiedIntakePower==0) && (driverSpecifiedIntakePower == 0)){
+            intakePower=0;
+        }
+        else{
+            if (operatorSpecifiedIntakePower>driverSpecifiedIntakePower){
+                intakePower = operatorSpecifiedIntakePower;
+            }
+            else{
+                intakePower = driverSpecifiedIntakePower;
+            }
+        }
+        
+        m_intake.movePower(intakePower);
     }
 
     // Called once the command ends or is interrupted.

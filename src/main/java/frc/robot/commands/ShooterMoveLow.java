@@ -59,12 +59,14 @@ public class ShooterMoveLow extends CommandBase {
         double curbShootRPM = 0.51*5000;
         m_shooter.moveSpeed(curbShootRPM);
         if(java.lang.Math.abs((m_shooter.getSpeed()-curbShootRPM)/curbShootRPM) < 0.1){
+            // Rumble power is 100% less 10% for every 1% off of the target speed, so will be at max rumbel when at speed
             double rumblePower = 1-10*java.lang.Math.abs((m_shooter.getSpeed()-curbShootRPM)/curbShootRPM);
-            RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kRightRumble,
-            rumblePower);
+            RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kRightRumble,rumblePower);
+            RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kRightRumble,rumblePower);
         }
         else{
             RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kRightRumble, 0.0);
+            RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kRightRumble, 0.0);
         }
 
     }
@@ -74,6 +76,7 @@ public class ShooterMoveLow extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.move(0);
         RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kRightRumble, 0.0);
+        RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kRightRumble, 0.0);
     }
 
     // Returns true when the command should end.
