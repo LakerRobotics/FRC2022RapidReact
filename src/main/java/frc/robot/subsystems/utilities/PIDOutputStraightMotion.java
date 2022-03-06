@@ -81,9 +81,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		/* not sure how to have calculate be accessable by the code and make sure it is called, and what to do with the return value, which I think is roational power
 
 		*/
-		public void calculate(double currentValue, double targetValue){
+		public double calculate(double currentValue, double targetValue){
 			//TODO not sure about making this the way the PID is called every cycle
 			rotationPower = m_RotationController.calculate(currentValue, targetValue);
+			return rotationPower;
 		}
 
 		protected synchronized double getRotationPower() 
