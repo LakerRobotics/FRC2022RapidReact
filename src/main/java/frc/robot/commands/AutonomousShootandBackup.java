@@ -28,19 +28,22 @@ import frc.robot.subsystems.Shooter;
 /**
  *
  */
-public class AutonomousCommand extends SequentialCommandGroup {
-        public AutonomousCommand(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
+public class AutonomousShootandBackup extends SequentialCommandGroup {
+        public AutonomousShootandBackup(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
 //did work runtime error        addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
 //addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
-CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
-                                              new ConveyorMove(theConveyor));
+CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
+                                              new IntakeMove(theIntake),
+                                              new ConveyorMove(theConveyor)).withTimeout(5);
 
-       // addCommands(spinAndShoot);
+        addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
+        addCommands(spinAndShootAndintake);
  //       addCommands(new ShooterMoveLow(shooter));
        // addCommands(new ConveyorMove(theConveyor));
-       addCommands(new IntakeDeploy(theIntake, theConveyor));
-       addCommands(new ShooterMoveLowTimed(shooter));
+      // addCommands(new IntakeDeployTimed(theIntake, theConveyor));
+       //addCommands(new ShooterMoveLowTimed(shooter));
        addCommands(new DriveTrainMovedTimed(theDriveTrain));
+       
     }
 
 }

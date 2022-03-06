@@ -117,7 +117,15 @@ public class DriveTrainMoveStraight extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-    //TODO 
+        //get 
+        double distanceSoFar = m_LineSource.getDistance();
+        double targetSpeed = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
+        double forwardPower = m_StraightDistancePIDController.calculate(distanceSoFar, targetSpeed);
+
+        double angleRightNow = m_TurnSource.getAngle();
+        double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
+
+    m_DriveTrain.arcadeDrive(forwardPower, turnPower);
     }
 
     // Called once the command ends or is interrupted.
