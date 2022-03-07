@@ -131,7 +131,8 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public void arcadeDrive(double power, double turnpower) {
-        differentialDrive1.arcadeDrive(power, turnpower);
+        boolean squareInputsToReduceSenstivityAtLowSpeeds = true;
+        differentialDrive1.arcadeDrive(power, turnpower, squareInputsToReduceSenstivityAtLowSpeeds);
     }
     public void tankDrive(double leftPower, double rightPower){
         differentialDrive1.tankDrive(leftPower, rightPower);
