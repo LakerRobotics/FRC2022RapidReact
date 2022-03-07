@@ -56,7 +56,7 @@ public class ShooterMoveLow extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double curbShootRPM = 0.51*5000;
+        double curbShootRPM = 0.55*5000;
         m_shooter.moveSpeed(curbShootRPM);
         if(java.lang.Math.abs((m_shooter.getSpeed()-curbShootRPM)/curbShootRPM) < 0.1){
             // Rumble power is 100% less 10% for every 1% off of the target speed, so will be at max rumbel when at speed

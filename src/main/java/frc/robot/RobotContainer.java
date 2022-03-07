@@ -133,7 +133,8 @@ intakeMovePower.whileHeld(new IntakeMove( m_intake ) ,true);
 final JoystickButton conveyorMovePower = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);        
                      conveyorMovePower.whileHeld(new ConveyorMove( m_conveyor ) ,true);
 //   Driver Controller
-final JoystickButton conveyorMovePowerDriver = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);        
+
+final JoystickButton conveyorMovePowerDriver = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);        
                      conveyorMovePowerDriver.whileHeld(new ConveyorMove( m_conveyor ) ,true);
     SmartDashboard.putData("ConveyorMovePower",new ConveyorMove( m_conveyor ) );
 
@@ -146,8 +147,8 @@ final JoystickButton shooterMovePowerShort = new JoystickButton(operatorControll
 final JoystickButton shooterMovePowerShortDriver = new JoystickButton(driverController, XboxController.Button.kA.value);        
                      shooterMovePowerShortDriver.whileHeld(new ShooterMoveLow( m_shooter ) ,true);
 //        access without interupting driving, with free trigger Finger
-final JoystickButton shooterMovePowerShortDriverEasyAccess = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);        
-                     shooterMovePowerShortDriverEasyAccess.whileHeld(new ShooterMoveLow( m_shooter ) ,true);
+//GrantRequest final JoystickButton shooterMovePowerShortDriverEasyAccess = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);        
+//GrantRequest                     shooterMovePowerShortDriverEasyAccess.whileHeld(new ShooterMoveLow( m_shooter ) ,true);
 //  Smartdashboard
     SmartDashboard.putData("ShooterMovePowerShort",new ShooterMove( m_shooter ) );
 
@@ -160,8 +161,8 @@ final JoystickButton shooterMovePowerLong = new JoystickButton(operatorControlle
 final JoystickButton shooterMovePowerLongDriver = new JoystickButton(driverController, XboxController.Button.kB.value);        
                      shooterMovePowerLongDriver.whileHeld(new ShooterMoveHigh( m_shooter ) ,true);
 //        access without interupting driving, with free trigger Finger
-final JoystickAxisAsButton shooterMovePowerLongDriverEasyAccess = new JoystickAxisAsButton(driverController, XboxController.Button.kRightStick.value);        
-                           shooterMovePowerLongDriverEasyAccess.whileHeld(new ShooterMoveHigh( m_shooter ) ,true);
+//GrantRequest final JoystickAxisAsButton shooterMovePowerLongDriverEasyAccess = new JoystickAxisAsButton(driverController, XboxController.Button.kRightStick.value);        
+//GrantRequest                           shooterMovePowerLongDriverEasyAccess.whileHeld(new ShooterMoveHigh( m_shooter ) ,true);
 SmartDashboard.putData("shooterMovePowerLongDriver",new ShooterMove( m_shooter ) );
 
 

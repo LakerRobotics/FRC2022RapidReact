@@ -57,7 +57,7 @@ public class IntakeControlPower extends CommandBase {
         // set Power to the maximum specified by the operator controller or the driver controller
         double intakePower = 0;
         double operatorSpecifiedIntakePower = RobotContainer.getInstance().getOperatorController().getLeftX();
-        double driverSpecifiedIntakePower = RobotContainer.getInstance().getOperatorController().getLeftTriggerAxis();
+        double driverSpecifiedIntakePower = RobotContainer.getInstance().getDriverController().getLeftTriggerAxis();
         
         if( (operatorSpecifiedIntakePower==0) && (driverSpecifiedIntakePower == 0)){
             intakePower=0;
@@ -70,6 +70,8 @@ public class IntakeControlPower extends CommandBase {
                 intakePower = driverSpecifiedIntakePower;
             }
         }
+        //temp TODO fix code above
+        //intakePower=driverSpecifiedIntakePower;
         
         m_intake.movePower(intakePower);
     }
