@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +22,11 @@ import frc.robot.subsystems.utilities.PIDOutputStraightMotion;
  */
 public class DriveTrainMoveStraight extends CommandBase {
     private final DriveTrain m_DriveTrain;
+
+    RelativeEncoder m_leftEncoder; 
+    RelativeEncoder m_rightEncoder; 
+    Gyro m_rotationSource;
+
 	//PIDSource m_LineSource;
 	//DoubleSupplier m_LineSource;
     private Encoder m_LineSource;
@@ -55,14 +62,17 @@ public class DriveTrainMoveStraight extends CommandBase {
     * @param ramp      in inches
     * @param targetAngle assume it want Degrees
     ------------------------------------------------*/
-   public DriveTrainMoveStraight(DriveTrain theDriveTrain, Encoder leftEncoder, Encoder rightEncoder, Gyro rotationSource, double distance, double maxspeed, double ramp, double targetAngle){
+   public DriveTrainMoveStraight(DriveTrain theDriveTrain, double distance, double maxspeed, double ramp, double targetAngle){
 
 
         m_DriveTrain = theDriveTrain;
         addRequirements(m_DriveTrain);
-
-        m_LineSource = new EncoderAvgLeftRight(leftEncoder, rightEncoder);
-        m_TurnSource = rotationSource;
+        m_leftEncoder    = theDriveTrain.getEncoderLeft();
+        m_rightEncoder   = theDriveTrain.getEncoderRight();
+        m_rotationSource = theDriveTrain.getGyro();
+     
+        m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
+        m_TurnSource = m_rotationSource;
         m_distance = distance;
         m_DistanceToExceed = m_distance; //TODO check if can eliminate this duplicate varable
         m_maxspeed = maxspeed;

@@ -19,16 +19,20 @@ import frc.robot.subsystems.Shooter;
  *
  */
 public class AutonomousWithDriveStraight extends SequentialCommandGroup {
-        public AutonomousWithDriveStraight(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain,
-         Encoder leftEncoder, Encoder rightEncoder, Gyro rotationSource){
+    public AutonomousWithDriveStraight(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
+//         Encoder leftEncoder, Encoder rightEncoder, Gyro rotationSource){
+
 //did work runtime error        addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
 //addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
-CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
+/**TEMP 
+ * CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
+                                              new ShooterMoveLow(shooter),
                                               new IntakeMove(theIntake),
-                                              new ConveyorMove(theConveyor)).withTimeout(5);
+                                              new ConveyorMove(theConveyor)  ).withTimeout(5);
+TEMP**/                                              
 
         //addCommands(new DriveTrainMoveStraight(theDriveTrain, leftEncoder, rightEncoder, rotationSource, distance, maxspeed, ramp, targetAngle));                                     
-        addCommands(new DriveTrainMoveStraight(theDriveTrain, leftEncoder, rightEncoder, rotationSource, 100, 3, 10, 0));                                     
+        addCommands(new DriveTrainMoveStraight(theDriveTrain, 100, 3, 10, 0));                                     
        
     }
 

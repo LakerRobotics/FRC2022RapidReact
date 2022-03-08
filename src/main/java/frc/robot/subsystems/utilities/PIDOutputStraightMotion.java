@@ -146,7 +146,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		    MotionControlPIDController localRotationSpeedPID;
 
 		    AdjustSpeedAsTravelHelper rotationSpeedProfile; 
-	        rotationSpeedProfile = new AdjustSpeedAsTravelMotionControlHelper(targetAngle, ramp, maxspeed, start, (DoubleSupplier) m_TurnSource, (DoubleConsumer) pidOutput);
+			GyroAngleAsDouble gyroAngleAsDouble = new GyroAngleAsDouble(m_TurnSource);
+	        rotationSpeedProfile = new AdjustSpeedAsTravelMotionControlHelper(targetAngle, ramp, maxspeed, start, gyroAngleAsDouble,  pidOutput);
 	        localRotationSpeedPID = new MotionControlPIDController(Kp,Ki,Kd, rotationSpeedProfile );
 //	        localRotationSpeedPID.setOutputRange(-maxRotationPower, maxRotationPower);
 	        //localRotationSpeedPID.setPID(Kp, Ki, Kd, 0);
