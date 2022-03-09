@@ -97,6 +97,7 @@ private final XboxController operatorController = new XboxController(1);
 
     //m_chooser.setDefaultOption("$command.getName()", new ${name.replace(' ', '')}( m_${name.substring(0,1).toLowerCase()}${name.substring(1).replace(' ', '')} ));
 m_chooser.setDefaultOption("AutnomouseShootAndBackup",new AutonomousShootandBackup(m_intake,m_shooter,m_conveyor, m_driveTrain));
+m_chooser.addOption(       "AutnomouseShootAndBackup",new AutonomousShootandBackup(m_intake,m_shooter,m_conveyor, m_driveTrain));
 
 m_chooser.addOption("AutnomouseStraight",new AutonomousWithDriveStraight(m_intake, m_shooter, m_conveyor, m_driveTrain
 //                                                                             m_driveTrain.getEncoderLeft(),
@@ -132,10 +133,15 @@ intakeMovePower.whileHeld(new IntakeMove( m_intake ) ,true);
 //   Operator Controller
 final JoystickButton conveyorMovePower = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);        
                      conveyorMovePower.whileHeld(new ConveyorMove( m_conveyor ) ,true);
+final JoystickButton conveyorMovePowerBackwards = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
+                     conveyorMovePowerBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
 //   Driver Controller
 
 final JoystickButton conveyorMovePowerDriver = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);        
                      conveyorMovePowerDriver.whileHeld(new ConveyorMove( m_conveyor ) ,true);
+
+final JoystickButton conveyorMovePowerDriverBackwards = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
+                     conveyorMovePowerDriverBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
     SmartDashboard.putData("ConveyorMovePower",new ConveyorMove( m_conveyor ) );
 
 // SHOOTER Curb Shoot
