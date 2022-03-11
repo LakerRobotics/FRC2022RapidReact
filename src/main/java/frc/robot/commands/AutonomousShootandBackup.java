@@ -32,11 +32,11 @@ public class AutonomousShootandBackup extends SequentialCommandGroup {
         public AutonomousShootandBackup(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
 //did work runtime error        addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
 //addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
+addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
 CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
                                               new IntakeMove(theIntake),
                                               new ConveyorMove(theConveyor)).withTimeout(5);
 
-        addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
         addCommands(spinAndShootAndintake);
  //       addCommands(new ShooterMoveLow(shooter));
        // addCommands(new ConveyorMove(theConveyor));

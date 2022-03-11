@@ -32,7 +32,7 @@ public class AutonomousWithDriveStraight extends SequentialCommandGroup {
 TEMP**/                                              
 
         //addCommands(new DriveTrainMoveStraight(theDriveTrain, leftEncoder, rightEncoder, rotationSource, distance, maxspeed, ramp, targetAngle));                                     
-        addCommands(new DriveTrainMoveStraight(theDriveTrain, 100, 3, 10, 0));                                     
+        addCommands(new DriveTrainMoveStraight(theDriveTrain, 1000, 3, 100, 0));                                     
        
     }
 

@@ -47,8 +47,8 @@ public class DriveTrainMoveStraight extends CommandBase {
 
 
     private boolean isStraightMovingForward = true;
-    private final double StraightKp = 0.001;
-    private final double StraightKi = 0.0;
+    private final double StraightKp = 0.04;
+    private final double StraightKi = 0.0000;
     private final double StraightKd = 0.0;
     private final double StraightMaxPower = 1;
 
@@ -137,6 +137,7 @@ public class DriveTrainMoveStraight extends CommandBase {
         double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
 
             m_DriveTrain.arcadeDrive(forwardPower, turnPower);
+            SmartDashboard.putNumber("DriveStraign Target distance", m_DistanceToExceed);
             SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
             SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
             SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
