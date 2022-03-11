@@ -3,6 +3,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -135,8 +136,13 @@ public class DriveTrainMoveStraight extends CommandBase {
         double angleRightNow = m_TurnSource.getAngle();
         double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
 
-    m_DriveTrain.arcadeDrive(forwardPower, turnPower);
-    }
+            m_DriveTrain.arcadeDrive(forwardPower, turnPower);
+            SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
+            SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
+            SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
+            SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
+            SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
+        }
 
     // Called once the command ends or is interrupted.
     @Override
