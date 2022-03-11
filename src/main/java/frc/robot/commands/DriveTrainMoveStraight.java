@@ -131,7 +131,8 @@ public class DriveTrainMoveStraight extends CommandBase {
         //get 
         double distanceSoFar = m_LineSource.getDistance();
         double targetSpeed = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
-        double forwardPower = m_StraightDistancePIDController.calculate(distanceSoFar, targetSpeed);
+        double currentSpeed = m_LineSource.getRate();
+        double forwardPower = m_StraightDistancePIDController.calculate(currentSpeed, targetSpeed);
 
         double angleRightNow = m_TurnSource.getAngle();
         double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
