@@ -54,13 +54,11 @@ public class DriveTrainMoveStraight extends CommandBase {
  
 
 /** 
-    * @param theDriveTrain the drivetrain subsystem
-    * @param distanceSource the wheel encoders
-    * @param rotationSource the Gryro
+    * @param theDriveTrain the drivetrain subsystem, will get encoder for distence from theDriveTrain and also the Gyro
     * @param distance  to travel in inches
     * @param maxSpeed  in ft/sec
-    * @param ramp      in inches
-    * @param targetAngle assume it want Degrees
+    * @param ramp      in inches (how many inches to take to get up to maxSpeed)
+    * @param targetAngle in Degrees, compared to the gyro provide from theDriveTrain
     ------------------------------------------------*/
    public DriveTrainMoveStraight(DriveTrain theDriveTrain, double distance, double maxspeed, double ramp, double targetAngle){
 
@@ -136,6 +134,14 @@ public class DriveTrainMoveStraight extends CommandBase {
         double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
 
     m_DriveTrain.arcadeDrive(forwardPower, turnPower);
+
+    // Some Smartdashboard prints
+    SmartDashboard.putNumber("DriveTrainMoveStraight distanceSoFar", distanceSoFar);
+    SmartDashboard.putNumber("DriveTrainMoveStraight targetSpeed", targetSpeed);
+    SmartDashboard.putNumber("DriveTrainMoveStraight forwardPower", forwardPower);
+    SmartDashboard.putNumber("DriveTrainMoveStraight angelRightNow", angleRightNow);
+    SmartDashboard.putNumber("DriveTrainMoveStraight turnPower", turnPower);
+
     }
 
     // Called once the command ends or is interrupted.
