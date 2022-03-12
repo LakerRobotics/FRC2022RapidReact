@@ -3,7 +3,8 @@ package frc.robot.subsystems.utilities;
 
 import java.util.function.DoubleConsumer;
 
-import frc.robot.subsystems.DriveTrainMotionControl;
+import frc.robot.subsystems.DriveTrain;
+//import frc.robot.subsystems.DriveTrainMotionControl;
 
 //import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,11 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PIDOutputDriveTurn implements DoubleConsumer/*PIDOutput*/ {
 
 
-	protected DriveTrainMotionControl m_DriveTrain;
+	protected DriveTrain m_DriveTrain;
 	
-	public PIDOutputDriveTurn(DriveTrainMotionControl driveTrain) {
+	public PIDOutputDriveTurn(DriveTrain m_DriveTrain2) {
 	    SmartDashboard.putString("DriveSpinPIDOutput", "constructor called");
-	    m_DriveTrain = driveTrain;
+	    m_DriveTrain = m_DriveTrain2;
 	}
 
 	@Override
