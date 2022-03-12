@@ -30,7 +30,7 @@ public class DriveTrainMoveStraight extends CommandBase {
 
 	//PIDSource m_LineSource;
 	//DoubleSupplier m_LineSource;
-    private Encoder m_LineSource;
+    private EncoderAvgLeftRight m_LineSource;
 	//PIDSource m_TurnSource;
 	//DoubleSupplier m_TurnSource;
 	private Gyro m_TurnSource;
@@ -47,7 +47,7 @@ public class DriveTrainMoveStraight extends CommandBase {
 
 
     private boolean isStraightMovingForward = true;
-    private final double StraightKp = 0.1;
+    private final double StraightKp = 0.01;
     private final double StraightKi = 0.0001;
     private final double StraightKd = 0.0;
     private final double StraightMaxPower = 1;
@@ -103,7 +103,7 @@ public class DriveTrainMoveStraight extends CommandBase {
 				//Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
 				m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
 				m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
-				                                                                                 start, new EncoderDistenceAsDouble(m_LineSource), 
+				                                                                                 start, m_LineSource, 
 																								 m_StraightRotationPIDOutput);
 				
 				//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
@@ -141,6 +141,7 @@ public class DriveTrainMoveStraight extends CommandBase {
             SmartDashboard.putNumber("DriveStraign Target distance", m_DistanceToExceed);
             SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
             SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
+            SmartDashboard.putNumber("DriveStraight currentSpeed", currentSpeed);
             SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
             SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
             SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
