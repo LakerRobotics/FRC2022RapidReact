@@ -64,7 +64,7 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
     public double getTargetSpeed(double currentMeasuredDistance){
        double targetSpeed = 0.0d;       
        
-       // get the motors going in the right direction
+       // get the    going in the right direction
        double gapEnd = m_targetDistance-currentMeasuredDistance;
        double rampDown = m_rampUpRampDownDistance * RAMP_MULTIPLIER;
        if(gapEnd == 0) 
