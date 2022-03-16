@@ -47,8 +47,8 @@ public class DriveTrainMoveStraight extends CommandBase {
 
 
     private boolean isStraightMovingForward = true;
-    private final double StraightKp = 0.01;
-    private final double StraightKi = 0.0001;
+    private final double StraightKp = 0.020;
+    private final double StraightKi = 0.001;
     private final double StraightKd = 0.0;
     private final double StraightMaxPower = 1;
 

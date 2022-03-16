@@ -139,7 +139,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			// for example id Kp is 0.025 at 20 degrees we would have 0.5 or half the power toward rotating the robot 
 //			private double Kp = 1d/200d; //0.025;// 
 		    //TODO change Kp to 1/20 or 0.025 so it is better at staying on the line.
-			final double Kp = 0.05; // so at denominator off in the spin-Rate the power will reach the max
+			final double Kp = 0.01; // so at denominator off in the spin-Rate the power will reach the max
 		    final double Ki = 0.0001;
 		    final double Kd = 0.0;
 		 
