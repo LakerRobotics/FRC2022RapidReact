@@ -1,6 +1,7 @@
 package frc.robot.commands;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -45,10 +46,12 @@ public class DriveTrainMoveStraight extends CommandBase {
     private PIDOutputStraightMotion    m_StraightRotationPIDOutput;
 	private MotionControlPIDController m_StraightDistancePIDController;
 
+    private SimpleMotorFeedforward m_simpleMotorFeedForward;
+
 
     private boolean isStraightMovingForward = true;
-    private final double StraightKp = 0.020;
-    private final double StraightKi = 0.001;
+    private final double StraightKp = 0.006;// 0.020;
+    private final double StraightKi = 0.008;//0.001;
     private final double StraightKd = 0.0;
     private final double StraightMaxPower = 1;
 
@@ -117,6 +120,11 @@ public class DriveTrainMoveStraight extends CommandBase {
 				//OLD m_PIDEnabled = true;
 				//TODO get calculate being called from som loop probably a command in the execute method RGT 20220227
 				//return true;
+//                m_simpleMotorFeedForward = new SimpleMotorFeedforward(ks, kv);
+//              so 15% min power to move (deadzone)
+//              assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100%
+
+                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.15, 0.0087);//0.005944);
 			}
 			//return false;
 //		}
@@ -132,7 +140,11 @@ public class DriveTrainMoveStraight extends CommandBase {
         double distanceSoFar = m_LineSource.getDistance();
         double targetSpeed = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
         double currentSpeed = m_LineSource.getRate();
-        double forwardPower = m_StraightDistancePIDController.calculate(currentSpeed, targetSpeed);
+
+        double firstGuessAtMotorPower = m_simpleMotorFeedForward.calculate(targetSpeed);
+        double pidTuneForwardPower = m_StraightDistancePIDController.calculate(currentSpeed, targetSpeed);
+        double forwardPower = firstGuessAtMotorPower + pidTuneForwardPower;
+    
 
         double angleRightNow = m_TurnSource.getAngle();
         double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
