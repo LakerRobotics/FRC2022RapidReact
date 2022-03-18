@@ -2,6 +2,7 @@ package frc.robot.subsystems.utilities;
 
 import java.util.function.DoubleConsumer;
 
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrainMotionControl;
 
 //import edu.wpi.first.wpilibj.PIDOutput;
@@ -39,7 +40,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		// if we assume angle is in degrees and if we were off by 20 Degrees then we would want how much correction
 		// for example id Kp is 0.025 at 20 degrees we would have 0.5 or half the power toward rotating the robot 
 
-		private DriveTrainMotionControl m_RobotDrive;
+		private DriveTrain m_RobotDrive;
 //		private double Kp;
 //		private PIDSource m_Gyro; 
 		private DoubleSupplier m_Gyro;
@@ -52,7 +53,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		/*
 		 * arcRadius in Inches
 		 */
-		public PIDOutputArcMotion(DriveTrainMotionControl drive, DoubleSupplier /*PIDSource*/ anglePIDSource, double arcRadius) {
+		public PIDOutputArcMotion(DriveTrain drive, DoubleSupplier /*PIDSource*/ anglePIDSource, double arcRadius) {
 			//SmartDashboard.putString("DriveSpinPIDOutput", "constructor called");
 			m_RobotDrive 	= drive;
 			m_Gyro 			= anglePIDSource	;
@@ -135,7 +136,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			//		 pi is the constant pi
 			//		 R is the Radius of the turn path we want the robot to take in inches
 			//       360 is number of degrees in full circle.
-			double speed = m_RobotDrive.GetAverageSpeed();
+			double speed =  (m_RobotDrive.getEncoderLeft().getVelocity()+ m_RobotDrive.getEncoderRight().getVelocity())/2; //TODO make sure correct units and see about using the AvgLeftRightEndocder
 //			if (debug) print
 			double angularChangeSpeed = (speed * 360)/(2 * Math.PI * m_ArcRadius);
 			return angularChangeSpeed;

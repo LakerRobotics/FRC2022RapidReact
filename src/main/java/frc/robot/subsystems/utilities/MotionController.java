@@ -193,7 +193,7 @@ public class MotionController
 	 * @param radiusOfArc  The radius of the arc travel path of the robot in inches
 	 * @return true if it has completed the arc path
 	 */
-	public boolean ExecuteArcMotion(double distance, double maxSpeed, double ramp, double radiusOfArc)
+	public boolean StartArcMotion(double distance, double maxSpeed, double ramp, double radiusOfArc)
 	{
 		//TODO have it pay attention to current position and calc based on the differance
 		if(m_DistanceToExceed>0){
@@ -220,7 +220,7 @@ public class MotionController
 //			m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
 //			m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_StraightSource, m_StraightRotationPIDOutput);
 			// motionControlForwardSpeed
-			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), radiusOfArc);
+//TEMP20220318			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), radiusOfArc);
 			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, 
 			                                                                            new EncoderDistenceAsDouble(m_LineSource),
 																						 m_ArcRotationPIDOutput);

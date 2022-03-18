@@ -104,7 +104,7 @@ public class DriveTrainMotionControl extends DifferentialDrive
 	// =====================================
 	public void DriveInArc(double distance, double maxspeed, double ramp, double radius){
 		if(!isPIDRunning){
-			isPIDRunning = m_MotionController.ExecuteArcMotion(distance, maxspeed, ramp, radius);
+			isPIDRunning = m_MotionController.StartArcMotion(distance, maxspeed, ramp, radius);
 		}
 	}
 	

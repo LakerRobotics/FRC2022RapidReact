@@ -24,7 +24,7 @@ import frc.robot.subsystems.utilities.PIDOutputStraightMotion;
 /**
  *
  */
-public class DriveTrainTurnToAngle extends CommandBase {
+public class DriveTrainTurnSpinToAngle extends CommandBase {
     private final DriveTrain m_DriveTrain;
 
     RelativeEncoder m_leftEncoder; 
@@ -58,7 +58,7 @@ public class DriveTrainTurnToAngle extends CommandBase {
     * @param theDriveTrain the drivetrain subsystem
     * @param turnToAngle In Degrees, in some field reference fram, like lookig downfield is 0 derees
     ------------------------------------------------*/
-   public DriveTrainTurnToAngle(DriveTrain theDriveTrain, double turnToAngle){
+   public DriveTrainTurnSpinToAngle(DriveTrain theDriveTrain, double turnToAngle){
 
 
         m_DriveTrain = theDriveTrain;
