@@ -124,7 +124,7 @@ public class DriveTrainMoveStraight extends CommandBase {
 //              so 15% min power to move (deadzone)
 //              assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100%
 
-                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.15, 0.0087);//0.005944);
+                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
 			}
 			//return false;
 //		}

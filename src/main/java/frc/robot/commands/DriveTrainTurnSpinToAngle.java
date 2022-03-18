@@ -133,8 +133,10 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 //            SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
 //            SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
 //            SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
-            SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
-            SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
+            SmartDashboard.putNumber("DriveTurn angleRightNow", angleRightNow);
+            SmartDashboard.putNumber("DriveTurn targetRotationSpeed", targetRotationSpeed);
+            SmartDashboard.putNumber("DriveTurn currentRotationSpeed",currentRotationSpeed);
+            SmartDashboard.putNumber("DriveTurn turnPower", turnPower);
         }
 
     // Called once the command ends or is interrupted.
