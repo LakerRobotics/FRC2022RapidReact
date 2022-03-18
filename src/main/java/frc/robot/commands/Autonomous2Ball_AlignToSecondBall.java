@@ -42,13 +42,13 @@ CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(new Sho
        // addCommands(new ConveyorMove(theConveyor));
       // addCommands(new IntakeDeployTimed(theIntake, theConveyor));
        //addCommands(new ShooterMoveLowTimed(shooter));
-       addCommands(new DriveTrainTurnToAngle(theDriveTrain, 180));                                     
+       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180));                                     
        CommandGroupBase driveForwardWithIntake = SequentialCommandGroup.parallel(        
            new DriveTrainMoveStraight(theDriveTrain, 100, 0.5, 10, 180),
            new IntakeMove(theIntake)
            );  
         addCommands(driveForwardWithIntake);
-        addCommands(new DriveTrainTurnToAngle(theDriveTrain, 0));                                     
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 0));                                     
         addCommands(new DriveTrainMoveStraight(theDriveTrain, 100, 0.5, 10, 0));
         CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
         new ConveyorMove(theConveyor)).withTimeout(5);

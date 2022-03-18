@@ -32,7 +32,7 @@ public class AutonomousTurnArround extends SequentialCommandGroup {
 TEMP**/                                              
 
         //addCommands(new DriveTrainMoveStraight(theDriveTrain, leftEncoder, rightEncoder, rotationSource, distance, maxspeed, ramp, targetAngle));                                     
-        addCommands(new DriveTrainTurnToAngle(theDriveTrain, 180));                                     
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180));                                     
        
     }
 
