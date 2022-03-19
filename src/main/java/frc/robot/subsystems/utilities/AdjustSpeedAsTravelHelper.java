@@ -34,9 +34,11 @@ public abstract class AdjustSpeedAsTravelHelper {
 	 * adjust the target rate that the PIDController is trying to achieve
 	 * @return
 	 */
-	public DoubleSupplier /*PIDSource*/ getM_source() {
-		return new wrapPIDInput(this, m_source);
+/*	public DoubleSupplier /*PIDSource*//* getM_source() {
+//		return new wrapPIDInput(this, m_source);
+		return m_source;
 	}
+*/
 
 	/**
 	 * Read the input(i.e. position) and calculate the speed for this position and put that in as the setPoint
@@ -62,12 +64,13 @@ public abstract class AdjustSpeedAsTravelHelper {
 		return m_source.getAsDouble();
 	}
 
+	// Can this be eliminated? TODO Can this be eliminated
 	class wrapPIDInput implements DoubleSupplier /*PIDSource*/ {
 
 	    private AdjustSpeedAsTravelHelper m_MCHelper;
 	    private DoubleSupplier/*PIDSource*/ m_source; 
 
-	    public wrapPIDInput(AdjustSpeedAsTravelHelper motionControlHelper, DoubleSupplier /*PIDSource*/ source) {
+	    public wrapPIDInput(AdjustSpeedAsTravelHelper motionControlHelper, DoubleSupplier /*PIDSource*/ source, DoubleSupplier sourceRate) {
 	        if (motionControlHelper == null) {
 				System.out.print("AdjustSpeeAsTravelHelper. wrapPIDInput(..) Given AdjustSpeedAsTravelHelper was null");
 	            throw new NullPointerException("Given AdjustSpeedAsTravelHelper was null");
@@ -77,12 +80,13 @@ public abstract class AdjustSpeedAsTravelHelper {
 	        }
 
 	        if (source == null){
-				System.out.print("AdjustSpeeAsTravelHelper. wrapPIDInput(..) Given DoubleSupplier was null");
-	            throw new NullPointerException("Given DoubleSupplier was null");
+				System.out.print("AdjustSpeeAsTravelHelper. wrapPIDInput(..) Given DoubleSupplier source was null");
+	            throw new NullPointerException("Given DoubleSupplier source was null");
 	        }
 	        else{
 	            m_source = source;
 	        }
+
 	    }
 	        
 		@Override

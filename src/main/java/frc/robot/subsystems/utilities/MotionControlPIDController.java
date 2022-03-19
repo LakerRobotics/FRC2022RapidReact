@@ -11,13 +11,13 @@ public class MotionControlPIDController extends PIDController {
 	 * @override
 	 * @throws Exception
 	 */
-	public double getRate() throws Exception
+/*	public double getRate() throws Exception
 	{
 // This looks like a recusive loop which is bad so 		SmartDashboard.putNumber("Motion Control Rate", this.getRate());
 		SmartDashboard.putNumber("MotionControlPIDController Rate", m_motionControlHelper.getM_source().getAsDouble());
 		return m_motionControlHelper.getM_source().getAsDouble();
 	}
-	
+*/	
 
 	public MotionControlPIDController(double Kp, double Ki, double Kd, AdjustSpeedAsTravelHelper motionControl) 
 	{
