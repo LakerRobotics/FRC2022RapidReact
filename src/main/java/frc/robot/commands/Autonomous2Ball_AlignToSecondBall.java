@@ -13,6 +13,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
@@ -37,9 +38,9 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
 
     //Spin up the shooter for Short Shot
         addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
-
+ 
     // Shoot and run the intake to deploy
-        CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
+       CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
                                               new ShooterMoveLow(shooter),
                                               new IntakeMove(theIntake),
                                               new ConveyorMove(theConveyor)).withTimeout(5);
@@ -49,7 +50,7 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
 
        // Now that we are facing a ball on the gound turn on intake and drive towards it
-       CommandGroupBase driveForwardWithIntake = SequentialCommandGroup.parallel(        
+       ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
            new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
            new IntakeMove(theIntake)
            );  
@@ -59,8 +60,9 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 0));
         
         // Drive towards the Hub, back to where we shot the first ball from
-        CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
-                                            new ShooterMoveLow(shooter).withTimeout(3),
+        // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
+        ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
+                                            new ShooterMoveLow(shooter),
                                             new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
                                             );
         addCommands(driveAndSpinUpShooter);
