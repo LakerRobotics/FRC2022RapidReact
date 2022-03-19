@@ -1,13 +1,13 @@
 package frc.robot.subsystems.utilities;
 
 import edu.wpi.first.math.controller.PIDController;
-import java.util.function.DoubleConsumer;
+//import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class AdjustSpeedAsTravelHelper {
 
-	protected DoubleConsumer /*PIDOutput*/ m_output;
+//	protected DoubleConsumer /*PIDOutput*/ m_output;
 	protected DoubleSupplier /*PIDSource*/ m_source;
 	PIDController regularPIDControl;
 
@@ -25,9 +25,9 @@ public abstract class AdjustSpeedAsTravelHelper {
 		this.regularPIDControl = regularPIDControl;
 	}
 
-	public DoubleConsumer /*PIDOutput*/ getM_output() {
-		return m_output;
-	}
+//	public DoubleConsumer /*PIDOutput*/ getM_output() {
+//		return m_output;
+//	}
 
 	/**
 	 * This returns the PIDSource wrapped so when called by the PIDController the motionControlHelper can
@@ -67,18 +67,18 @@ public abstract class AdjustSpeedAsTravelHelper {
 	// Can this be eliminated? TODO Can this be eliminated
 	class wrapPIDInput implements DoubleSupplier /*PIDSource*/ {
 
-	    private AdjustSpeedAsTravelHelper m_MCHelper;
+//	    private AdjustSpeedAsTravelHelper m_MCHelper;
 	    private DoubleSupplier/*PIDSource*/ m_source; 
 
 	    public wrapPIDInput(AdjustSpeedAsTravelHelper motionControlHelper, DoubleSupplier /*PIDSource*/ source, DoubleSupplier sourceRate) {
-	        if (motionControlHelper == null) {
+/*	        if (motionControlHelper == null) {
 				System.out.print("AdjustSpeeAsTravelHelper. wrapPIDInput(..) Given AdjustSpeedAsTravelHelper was null");
 	            throw new NullPointerException("Given AdjustSpeedAsTravelHelper was null");
 	        }
 	        else{
                 m_MCHelper = motionControlHelper;            	
 	        }
-
+*/
 	        if (source == null){
 				System.out.print("AdjustSpeeAsTravelHelper. wrapPIDInput(..) Given DoubleSupplier source was null");
 	            throw new NullPointerException("Given DoubleSupplier source was null");

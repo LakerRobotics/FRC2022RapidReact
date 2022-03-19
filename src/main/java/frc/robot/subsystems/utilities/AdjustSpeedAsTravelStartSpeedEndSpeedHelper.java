@@ -1,6 +1,6 @@
 package frc.robot.subsystems.utilities;
 
-import java.util.function.DoubleConsumer;
+//import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -38,7 +38,8 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
      */
     public AdjustSpeedAsTravelStartSpeedEndSpeedHelper(double aStartDistance, double aStartSpeed, 
     		                       double aEndDistance,   double aEndSpeed,
-    		                       DoubleSupplier/*PIDSource*/ source, DoubleConsumer/*PIDOutput*/ output){
+    		                       DoubleSupplier/*PIDSource*/ source//, DoubleConsumer/*PIDOutput*/ output
+                                   ){
     		
     	m_startDistance          = aStartDistance; // start position, in distance units for example inches or Degrees of rotation
     	m_startSpeed             = aStartSpeed;    // start speed, in distance units for example inches or RevolutionsPerMin

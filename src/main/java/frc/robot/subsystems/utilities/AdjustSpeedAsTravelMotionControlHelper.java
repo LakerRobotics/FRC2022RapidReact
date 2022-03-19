@@ -1,5 +1,5 @@
 package frc.robot.subsystems.utilities;
-import java.util.function.DoubleConsumer;
+//import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,13 +29,13 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
      */
     public AdjustSpeedAsTravelMotionControlHelper(double targetDistance, double rampUpRampDownDistance, double runningSpeed, 
     		            double initialMeasuredDistance,
-                        DoubleSupplier source, DoubleConsumer output // used in abstract base class
+                        DoubleSupplier source//, DoubleConsumer output // used in abstract base class
                         ){
     	m_targetDistance          = targetDistance;
     	m_rampUpRampDownDistance  = Math.abs(rampUpRampDownDistance);
     	m_runningSpeed            = runningSpeed;
     	m_initialMeasuredDistance = Math.abs(initialMeasuredDistance);
-    	m_output = output;
+//    	m_output = output;
     	m_source = source;
     }
 

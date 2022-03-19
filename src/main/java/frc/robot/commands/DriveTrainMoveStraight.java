@@ -93,19 +93,21 @@ public class DriveTrainMoveStraight extends CommandBase {
 			
 			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
 			{
-				//Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
+                // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
 				m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
-				m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
+
+                // FORWARD POWER, will have two parts, a guess of the motor power needed plus PID control to try and get to actaul speed requesting
+                // so 20% min power to move (deadzone)
+                // assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
+                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
+
+                //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
+                m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
 				                                                                                 start, m_LineSource, 
-																								 m_StraightRotationPIDOutput);
-				
-				//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
+																								 m_StraightRotationPIDOutput);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
+				//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
 				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
 				m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
-				
-//              so 20% min power to move (deadzone)
-//              assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
-                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
 			}
     	}
     }
@@ -114,8 +116,8 @@ public class DriveTrainMoveStraight extends CommandBase {
     @Override
     public void execute() {
         double distanceSoFar = m_LineSource.getDistance();
-        double targetSpeed = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
-        double currentSpeed = m_LineSource.getRate();
+        double targetSpeed   = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
+        double currentSpeed  = m_LineSource.getRate();
 
         double firstGuessAtMotorPower = m_simpleMotorFeedForward.calculate(targetSpeed);
         double pidTuneForwardPower = m_StraightDistancePIDController.calculate(currentSpeed, targetSpeed);
