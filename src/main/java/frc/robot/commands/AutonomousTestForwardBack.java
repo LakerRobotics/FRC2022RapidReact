@@ -29,9 +29,9 @@ import frc.robot.subsystems.Shooter;
 /**
  *
  */
-public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
+public class AutonomousTestForwardBack extends SequentialCommandGroup {
 
-    public Autonomous2Ball_AlignToSecondBall(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
+    public AutonomousTestForwardBack(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
 
         //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
@@ -51,30 +51,32 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         addCommands(spinAndShootAndintake);
 
        // Turn Around
-       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
+       //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
 
        // Now that we are facing a ball on the gound turn on intake and drive towards it
-       ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
-           new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
-           new IntakeMove(theIntake)
-           );  
-        addCommands(driveForwardWithIntake);
+       ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
+                                            new ShooterMoveLow(shooter).withTimeout(5),
+                                            new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/)
+                                            );
+        addCommands(driveAndSpinUpShooter);
+       
 
         //Turn back toward Hub,now that we have picked up the ball from the ground
-        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 359));
+        //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 359));
         
         // Drive towards the Hub, back to where we shot the first ball from
         // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
-        ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
-                                            new ShooterMoveLow(shooter),
-                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 359 /*Angle to drive straight on*/)
-                                            );
-        addCommands(driveAndSpinUpShooter);
+        ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
+            new IntakeMove(theIntake).withTimeout(5),
+            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/)
+           );  
+        addCommands(driveForwardWithIntake);
+        
 
-        CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(
+        /*CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(
                                             new ShooterMoveLow(shooter),
                                             new ConveyorMove(theConveyor)).withTimeout(5);
-        addCommands(spinAndShoot);
+        addCommands(spinAndShoot);*/
 
         // Drive off the tarmac
         addCommands(new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 360 /*Angle to drive straight on*/));
