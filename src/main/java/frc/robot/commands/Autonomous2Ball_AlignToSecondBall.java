@@ -29,31 +29,49 @@ import frc.robot.subsystems.Shooter;
  *
  */
 public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
-        public Autonomous2Ball_AlignToSecondBall(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
-//did work runtime error        addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
-//addCommands(new ShooterMoveLow(RobotContainer.getInstance().m_shooter));
-addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
-CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
+
+    public Autonomous2Ball_AlignToSecondBall(Intake theIntake, Shooter shooter,Conveyor theConveyor, DriveTrain theDriveTrain){
+
+        //TODO create a startShooterLow command (so it will keep running, all during auton) and 
+        //TODO create a StartIntake command
+
+    //Spin up the shooter for Short Shot
+        addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
+
+    // Shoot and run the intake to deploy
+        CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
+                                              new ShooterMoveLow(shooter),
                                               new IntakeMove(theIntake),
                                               new ConveyorMove(theConveyor)).withTimeout(5);
-
         addCommands(spinAndShootAndintake);
- //       addCommands(new ShooterMoveLow(shooter));
-       // addCommands(new ConveyorMove(theConveyor));
-      // addCommands(new IntakeDeployTimed(theIntake, theConveyor));
-       //addCommands(new ShooterMoveLowTimed(shooter));
-       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180));                                     
+
+       // Turn Arround 
+       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
+
+       // Now that we are facing a ball on the gound turn on intake and drive towards it
        CommandGroupBase driveForwardWithIntake = SequentialCommandGroup.parallel(        
-           new DriveTrainMoveStraight(theDriveTrain, 100, 1, 10, 180),
+           new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
            new IntakeMove(theIntake)
            );  
         addCommands(driveForwardWithIntake);
-        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 0));                                     
-        addCommands(new DriveTrainMoveStraight(theDriveTrain, -100, -1, 10, 0));
-        CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(new ShooterMoveLow(shooter),
-        new ConveyorMove(theConveyor)).withTimeout(5);
+
+        //Turn back toward Hub,now that we have picked up the ball from the ground
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 0));
+        
+        // Drive towards the Hub, back to where we shot the first ball from
+        CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
+                                            new ShooterMoveLow(shooter).withTimeout(3),
+                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
+                                            );
+        addCommands(driveAndSpinUpShooter);
+
+        CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(
+                                            new ShooterMoveLow(shooter),
+                                            new ConveyorMove(theConveyor)).withTimeout(5);
         addCommands(spinAndShoot);
-        addCommands(new DriveTrainMoveStraight(theDriveTrain, 100, 1, 10, 0));
+
+        // Drive off the tarmac
+        addCommands(new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/));
     }
 
 }
