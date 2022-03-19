@@ -1,25 +1,21 @@
 package frc.robot.subsystems;
 
-
-//import edu.wpi.first.wpilibj.PIDSource;
 import java.util.function.DoubleSupplier;
-import edu.wpi.first.wpilibj.shuffleboard.*;
-//import edu.wpi.first.wpilibj.PIDSourceType;`
+import frc.robot.subsystems.utilities.EncoderAvgLeftRight;
 
 /*
  * This is to wrap the drive train to provide the wheel encoders as PIDInput sources
  */
 public class PIDSourceDistance implements DoubleSupplier {
 
-	DriveTrainMotionControl m_driveTrainMotionControl;
+	DriveTrain m_driveTrain;
+	EncoderAvgLeftRight m_encoderAvg;
 	boolean returnDistance = true;
 	
-	public PIDSourceDistance(DriveTrainMotionControl the_driveTrainMotionControl) {
-		m_driveTrainMotionControl = the_driveTrainMotionControl;
+	public PIDSourceDistance(DriveTrain the_driveTrain) {
+		m_driveTrain = the_driveTrain;
+        m_encoderAvg = new EncoderAvgLeftRight(m_driveTrain.getEncoderLeft(), m_driveTrain.getEncoderRight());
 	}
-
-
-	
 	
 //	@Override
 	public void setPIDSourceTypeToDistance(boolean isDistance) {
@@ -46,10 +42,10 @@ public class PIDSourceDistance implements DoubleSupplier {
 	}
 	public double getAsDouble(){
 		if(returnDistance) {
-			return m_driveTrainMotionControl.GetAverageDistance();
+			return m_encoderAvg.getDistance();// m_driveTrain.GetAverageDistance();
 		}
 		else {
-			return m_driveTrainMotionControl.GetAverageSpeed();			
+			return m_encoderAvg.getRate();//m_driveTran.GetAverageSpeed();			
 		}
 
 	}

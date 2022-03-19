@@ -1,16 +1,6 @@
 package frc.robot.subsystems.utilities;
-
-import java.lang.reflect.Method;
-
-import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-//import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.function.DoubleConsumer;
-//import edu.wpi.first.wpilibj.PIDSource;
 import java.util.function.DoubleSupplier;
-//import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -39,7 +29,6 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
      */
     public AdjustSpeedAsTravelMotionControlHelper(double targetDistance, double rampUpRampDownDistance, double runningSpeed, 
     		            double initialMeasuredDistance,
-//    		            PIDSource source, PIDOutput output){
                         DoubleSupplier source, DoubleConsumer output // used in abstract base class
                         ){
     	m_targetDistance          = targetDistance;
@@ -48,13 +37,7 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
     	m_initialMeasuredDistance = Math.abs(initialMeasuredDistance);
     	m_output = output;
     	m_source = source;
-
-    	}
-
-//DontThinkNeeded    public void setTargetDistance(double new_targetDistance){
-//DontThinkNeeded		m_targetDistance = new_targetDistance;
-//DontThinkNeeded	}
-
+    }
 
     /**
      * Given the currentPosition (i.e. distance) this will return the current target speed 
@@ -79,20 +62,16 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
        // Calculate the reduction to the speed if at the start
        double percentRampUp;
        double gapStart = currentMeasuredDistance-m_initialMeasuredDistance;
-       if( Math.abs(gapStart) > m_rampUpRampDownDistance)
-       {
+       if( Math.abs(gapStart) > m_rampUpRampDownDistance){
     	   // We are outside of the rampUp zone 
     	   percentRampUp = 1; //100%
        }
-       else
-       {
+       else{
     	   // Are we right on top of the start point, if so, don't set motor to zero but some minimum number to get things to move
-           if( Math.abs(gapStart) < m_rampUpRampDownDistance*(percentDeadZoneOverride))
-           {
+           if( Math.abs(gapStart) < m_rampUpRampDownDistance*(percentDeadZoneOverride)){
     	      percentRampUp = percentDeadZoneOverride ; //just to make sure it does not stay stuck at the start 
            }
-           else
-           {
+           else{
                percentRampUp = Math.abs(gapStart)/m_rampUpRampDownDistance;
            }
        }
@@ -111,15 +90,12 @@ public class AdjustSpeedAsTravelMotionControlHelper extends AdjustSpeedAsTravelH
        // If we are near the end, then ramp down
        if (Math.abs(gapStart) < m_rampUpRampDownDistance) {
     	   targetSpeed = percentRampUp * targetSpeed;
-       } else if(Math.abs(gapEnd) < rampDown) 
-       {
+       }
+       else if(Math.abs(gapEnd) < rampDown){
     	   targetSpeed = percentRampDown * targetSpeed;
        }
-       // System.out.println("targetSpeed="+targetSpeed);
-       SmartDashboard.putNumber("targetSpeed",targetSpeed);
-       
+       SmartDashboard.putNumber("targetSpeed",targetSpeed);       
        SmartDashboard.putNumber("getTargetSpeed MotionControlHelper", targetSpeed);
-       System.out.println("getTargetSpeed MotionControlHelper: " + Double.toString(targetSpeed));
        return targetSpeed;
     }
     

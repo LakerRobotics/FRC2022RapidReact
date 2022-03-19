@@ -4,7 +4,6 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.Encoder;
 
 public class EncoderAvgLeftRight implements DoubleSupplier{
     RelativeEncoder m_leftEncoder;

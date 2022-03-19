@@ -1,22 +1,7 @@
 package frc.robot.subsystems.utilities;
 
 import frc.robot.subsystems.DriveTrain;
-
-//FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlHelper;
-//FromRudy import org.usfirst.frc5053.FRC2016Stronghold.MotionControlPIDController;
-//FromRudy import org.usfirst.frc5053.FRC2016Stronghold.RobotMap;
-
-import frc.robot.subsystems.DriveTrainMotionControl;
-
-
-//import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.function.DoubleConsumer;
-
-	
-//	import edu.wpi.first.wpilibj.PIDSource;
-	import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,13 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 	public class PIDOutputStraightMotion implements DoubleConsumer /*PIDOutput*/ {
 
-		
 		double maxRotationPower = 1;
 
-		//private DriveTrainMotionControl m_driveTrain;
 		private DriveTrain m_driveTrain;
-//		private PIDSource m_TurnSource;
-//		private DoubleSupplier m_TurnSource;
 		private Gyro m_TurnSource;
 		private double m_targetAngle = 0.0d;
 		private double rotationPower = 0.0d;
@@ -55,7 +36,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			
 			m_RotationController = createRotationPIDController(m_targetAngle, slowRotation, (DoubleConsumer) wrappedRotationPIDOutput);
 			
-			//WrapRotationPIDInput  wrapRotationPIDInput = new WrapRotationPIDOutput(rotationPID, (PIDSource) m_gyro);
 		}
 
 		/**
@@ -64,7 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		 * @param turnSource
 		 * @param targetAngle
 		 */
-		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
+/* 		public PIDOutputStraightMotion(DriveTrainMotionControl drivetrain, Gyro turnSource, double targetAngle) 
 		{
 			m_targetAngle = targetAngle;
 //			m_driveTrain = drivetrain; TODO GET THIS TO WORK
@@ -77,12 +57,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			
 			//WrapRotationPIDInput  wrapRotationPIDInput = new WrapRotationPIDOutput(rotationPID, (PIDSource) m_gyro);
 		}
+*/
 
-		/* not sure how to have calculate be accessable by the code and make sure it is called, and what to do with the return value, which I think is roational power
-
-		*/
 		public double calculate(double currentValue, double targetValue){
-			//TODO not sure about making this the way the PID is called every cycle
 			rotationPower = m_RotationController.calculate(currentValue, targetValue);
 			return rotationPower;
 		}
@@ -186,8 +163,5 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			public void accept(double rotationPower) {
 				this.m_RotationPowerDestination.setRotationPower(-rotationPower); // Inverted because if your off in the positive direction then need to bring it back the other way
 			}
-
 	    }
-	    
-
 	}

@@ -1,19 +1,7 @@
 package frc.robot.subsystems.utilities;
 
-import java.lang.reflect.Method;
-
-import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-//import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.math.controller.PIDController;
-//import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.function.DoubleConsumer;
-//import edu.wpi.first.wpilibj.PIDSource;
 import java.util.function.DoubleSupplier;
-//import edu.wpi.first.wpilibj.PIDSourceType; // no replacement
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * 
@@ -35,15 +23,12 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
     double m_currentMeasuredDistance  = 0.0d;
     double m_initialMeasuredDistance  = 0.0d;
  
-//  	public double percentDeadZoneOverride = 0.5;//enter portion of 1 (e.g. .1 for 10%)
-//   	
-//   	private final double RAMP_MULTIPLIER = 4.0;
   
 
 	   	
 	/**
      * This helper class just takes a start distance and speed, and and end distance and speed 
-     *     and will provide a ramping of speed (either up or down)  to get to that end distance and be traveling athte end speed
+     *     and will provide a ramping of speed (either up or down)  to get to that end distance and be traveling at the end speed
      * @param aStartDistance   Where we are Starting at (for example what the wheel encoder should currently be reporting) 
      * @param aStartSpeed      The speed we are to start at (note can't be 0, else we wont go anywhwere to start moving)
      * @param aEndDistance     Where we are trying to get to
@@ -53,8 +38,7 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
      */
     public AdjustSpeedAsTravelStartSpeedEndSpeedHelper(double aStartDistance, double aStartSpeed, 
     		                       double aEndDistance,   double aEndSpeed,
-    		                       DoubleSupplier/*PIDSource*/ source, DoubleConsumer/*PIDOutput*/ output)
-    {
+    		                       DoubleSupplier/*PIDSource*/ source, DoubleConsumer/*PIDOutput*/ output){
     		
     	m_startDistance          = aStartDistance; // start position, in distance units for example inches or Degrees of rotation
     	m_startSpeed             = aStartSpeed;    // start speed, in distance units for example inches or RevolutionsPerMin
@@ -68,11 +52,7 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
     	} 
     	else {
     		m_ramp = m_endSpeed - m_startSpeed / (m_endDistance-m_startDistance);
-    	}
-
-//    	m_output = output;
-//    	m_source = source;
-    	
+    	}    	
     }
 
 
@@ -86,6 +66,7 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
     	double distanceTraveledSoFar = currentMeasuredDistance - m_startDistance;
     	
     	double targetSpeed = m_startSpeed + m_ramp*distanceTraveledSoFar;
+        
     	return targetSpeed;
     }
     

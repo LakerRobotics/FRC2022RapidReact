@@ -1,22 +1,10 @@
 package frc.robot.subsystems.utilities;
 
 import java.util.function.DoubleConsumer;
-
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.DriveTrainMotionControl;
-
-//import edu.wpi.first.wpilibj.PIDOutput;
-import java.util.function.DoubleConsumer;
-
-//import edu.wpi.first.wpilibj.PIDSource;
 import java.util.function.DoubleSupplier;
-
-//import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.math.controller.PIDController;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
  
 	/**
 	 * 
@@ -126,7 +114,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 		}
 		
 		private double getTargetRotationalSpeed(){
-			boolean debug = true;
+			//boolean debug = true;
 			//calculate the correct rotation speed based on the current speed of the robot.
 			//arched-turn for a robot in a big circle of radius R and 
 			//  it seems the the rate of angler change just needs to be proportional to the speed,
