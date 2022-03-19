@@ -167,6 +167,10 @@ final JoystickButton shooterMovePowerLong = new JoystickButton(operatorControlle
 //        same as Operator
 final JoystickButton shooterMovePowerLongDriver = new JoystickButton(driverController, XboxController.Button.kB.value);        
                      shooterMovePowerLongDriver.whileHeld(new ShooterMoveHigh( m_shooter ) ,true);
+                     
+final JoystickButton driveTrainForward = new JoystickButton(driverController, XboxController.Button.kY.value);        
+                     driveTrainForward.whileHeld(new DriveTrainMoveForward( m_driveTrain ) ,true);
+                     
 //        access without interupting driving, with free trigger Finger
 //GrantRequest final JoystickAxisAsButton shooterMovePowerLongDriverEasyAccess = new JoystickAxisAsButton(driverController, XboxController.Button.kRightStick.value);        
 //GrantRequest                           shooterMovePowerLongDriverEasyAccess.whileHeld(new ShooterMoveHigh( m_shooter ) ,true);

@@ -84,7 +84,13 @@ public class DriveTrainMoveStraight extends CommandBase {
         m_targetAngle = targetAngle;
 
         m_StraightTolerance = 0.5;
-    
+
+        if(distance > 0){
+            isStraightMovingForward = true;
+        }
+        else{
+            isStraightMovingForward = false;
+        }
 
     }
 
