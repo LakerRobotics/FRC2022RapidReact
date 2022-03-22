@@ -8,7 +8,6 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
 import frc.robot.subsystems.utilities.GyroAngleAsDouble;
 import frc.robot.subsystems.utilities.MotionControlPIDController;
-import frc.robot.subsystems.utilities.PIDOutputDriveTurn;
 
 /**
  *
@@ -60,8 +59,7 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
 			//Instantiates a new MotionControlHelper() object for the new turn segment
 			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
-			                                                                      new GyroAngleAsDouble(m_TurnSource), 
-																				  new PIDOutputDriveTurn(m_DriveTrain));
+			                                                                      new GyroAngleAsDouble(m_TurnSource)/*new PIDOutputDriveTurn(m_DriveTrain)*/);
 			//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
 			m_TurnPIDController = new MotionControlPIDController(TurnKp, TurnKi, TurnKd, m_AdjustRpmAsTurnHelper);
 				

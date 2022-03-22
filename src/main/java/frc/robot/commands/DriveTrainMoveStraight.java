@@ -103,8 +103,7 @@ public class DriveTrainMoveStraight extends CommandBase {
 
                 //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
                 m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
-				                                                                                 start, m_LineSource, 
-																								 m_StraightRotationPIDOutput);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
+				                                                                                 start, m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
 				//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
 				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
 				m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance

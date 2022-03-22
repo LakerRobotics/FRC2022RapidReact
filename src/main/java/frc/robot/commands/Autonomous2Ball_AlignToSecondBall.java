@@ -52,7 +52,7 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
 
        // Now that we are facing a ball on the gound turn on intake and drive towards it
        ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
-           new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
+           new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2/* Should be 1*/ /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
            new IntakeMove(theIntake)
            );  
         addCommands(driveForwardWithIntake);
@@ -64,7 +64,7 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
         ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
                                             new ShooterMoveLow(shooter),
-                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 359 /*Angle to drive straight on*/)
+                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 359 /*Angle to drive straight on*/)
                                             );
         addCommands(driveAndSpinUpShooter);
 

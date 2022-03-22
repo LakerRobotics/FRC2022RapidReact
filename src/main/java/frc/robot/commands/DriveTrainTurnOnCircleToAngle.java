@@ -38,15 +38,15 @@ public class DriveTrainTurnOnCircleToAngle extends CommandBase {
     private MotionControlPIDController m_ArcDistancePIDController; 
 
 
-    private PIDOutputArcMotion m_ArcRotationPIDOutput;
+    
 
-    private double m_TurnTolerance = 5;// had been 0.5		
-    private double m_AngularVelocityTolerance = 15;
+//    private double m_TurnTolerance = 5;// had been 0.5		
+//    private double m_AngularVelocityTolerance = 15;
 
-	private final double TurnKp = 0.005;
-	private final double TurnKi = 0.0020;
-	private final double TurnKd = 0.0;
-	private final double TurnMaxPower = 1;
+//    private final double TurnKp = 0.005;
+//    private final double TurnKi = 0.0020;
+//    private final double TurnKd = 0.0;
+//    private final double TurnMaxPower = 1;
 
     private final double ArcKp = 0.002;//StraightKp; //0.002;
 	private final double ArcKi = 0.001; //StraightKi; //0.001;
@@ -156,15 +156,9 @@ public class DriveTrainTurnOnCircleToAngle extends CommandBase {
 			double convertedRamp = m_ramp; 			// in inches
 			
 
-//			//Instantiates a new MotionControlHelper() object for the new Arch segment
-//			//Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
-//			m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
-//			m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_StraightSource, m_StraightRotationPIDOutput);
-			// motionControlForwardSpeed
-			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), m_radiusOfArc);
+new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), m_radiusOfArc);
 			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, 
-			                                                                            m_LineSource,
-																						 m_ArcRotationPIDOutput);
+			                                                                            m_LineSource/*m_ArcRotationPIDOutput*/);
 			
 //			//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
 //			m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
