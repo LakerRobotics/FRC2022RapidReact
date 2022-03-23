@@ -11,6 +11,7 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -48,7 +49,8 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         addCommands(spinAndShootAndintake);
 
        // Turn Around
-       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
+       addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));   
+       
 
        // Now that we are facing a ball on the gound turn on intake and drive towards it
        ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
@@ -60,6 +62,8 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         //Turn back toward Hub,now that we have picked up the ball from the ground
         addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 359));
         
+        addCommands(new ShooterMoveLowGetUpToSpeed(shooter)); /* To test code crashing prevention measures. */
+
         // Drive towards the Hub, back to where we shot the first ball from
         // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
         ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(

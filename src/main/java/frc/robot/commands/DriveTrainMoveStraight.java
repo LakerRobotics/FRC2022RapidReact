@@ -83,6 +83,7 @@ public class DriveTrainMoveStraight extends CommandBase {
     @Override
     public void initialize() {
 	{
+        System.out.println("DriveTrainMoveStraight.initialize Entered");
             m_LineSource.reset();
 			
 			double start = 0;
@@ -91,8 +92,8 @@ public class DriveTrainMoveStraight extends CommandBase {
 			double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
 			double convertedRamp = m_ramp;			// Inches/Second
 			
-			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
-			{
+//			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
+//			{
                 // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
 				m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
 
@@ -107,13 +108,15 @@ public class DriveTrainMoveStraight extends CommandBase {
 				//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
 				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
 				m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
-			}
+//			}
     	}
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        
+        
         double distanceSoFar = m_LineSource.getDistance();
         double targetSpeed   = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
         double currentSpeed  = m_LineSource.getRate();
@@ -127,13 +130,14 @@ public class DriveTrainMoveStraight extends CommandBase {
 
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
 
-        SmartDashboard.putNumber("DriveStraign Target distance", m_DistanceToExceed);
+        
         SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
         SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
         SmartDashboard.putNumber("DriveStraight currentSpeed", currentSpeed);
         SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
         SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
         SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
+        
     }
 
     // Called once the command ends or is interrupted.
