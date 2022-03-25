@@ -53,10 +53,10 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 		double start = m_TurnSource.getAngle();
 		
 		double maxRPM = 60/*30*/;			// Rotations/Minute
-		double ramp = 45/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
+		double ramp = 30/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
 		double maxSpeed = maxRPM * 6; // 360 Degrees/60 seconds to convert RPM to speed or degrees per second
 		
-		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
+//		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
 			//Instantiates a new MotionControlHelper() object for the new turn segment
 			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
 			                                                                      new GyroAngleAsDouble(m_TurnSource)/*new PIDOutputDriveTurn(m_DriveTrain)*/);
@@ -65,7 +65,7 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 				
 			//Turns the MotionControlPID ON and it will continue to execute by itself until told otherwise.
 			//m_TurnPIDController.enable();	
-		}
+//		}
 
     }
 
@@ -98,7 +98,7 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
             if (Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance  &&
                 Math.abs(m_TurnSource.getRate()               ) < m_AngularVelocityTolerance)
             {
- //               m_DriveTrain.tankDrive(0, 0);// ArcadeDrive(0, 0);
+                m_DriveTrain.tankDrive(0, 0);// ArcadeDrive(0, 0);
                 return true;
             }
             return false;

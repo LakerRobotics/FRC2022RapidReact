@@ -40,7 +40,7 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
     new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
     new IntakeMove(theIntake)
     );  
- addCommands(driveForwardWithIntake);
+    addCommands(driveForwardWithIntake);
 
    // turn around to face hub
    addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
@@ -49,8 +49,10 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
    // turn on shooter 
    // wait for shooter to charge up then move ball up on the conveytor
    ParallelRaceGroup driveForwardWithShooter = new ParallelRaceGroup(        
-    new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
-    new ShooterMoveLow(shooter));
+    new ShooterMoveLow(shooter),
+    new IntakeMove(theIntake),
+    new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
+    );
     addCommands(driveForwardWithShooter);
 
    //shoot the ball 
