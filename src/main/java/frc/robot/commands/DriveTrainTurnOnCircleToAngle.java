@@ -13,32 +13,16 @@ import frc.robot.subsystems.utilities.PIDOutputArcMotion;
 /**
  *
  */
-public class DriveTrainTurnOnCircleToAngle extends CommandBase {
-    private final DriveTrain m_DriveTrain;
-
-    RelativeEncoder m_leftEncoder; 
-    RelativeEncoder m_rightEncoder; 
-    Gyro m_rotationSource;
-
-	//PIDSource m_TurnSource;
-	//DoubleSupplier m_TurnSource;
-	private Gyro m_TurnSource;
-    
-    private EncoderAvgLeftRight m_LineSource;
+public class DriveTrainTurnOnCircleToAngle extends DriveTrainMoveStraight {
     private double m_distance;
     private double m_DistanceToExceed; //TODO Check if can Eliminate this redudent variable
-    private double m_maxspeed;
-    private double m_ramp;
-    private double m_radiusOfArc;
-
-    private boolean isArcMovingForward;
 
 //    private AdjustSpeedAsTravelMotionControlHelper m_AdjustRpmAsTurnHelper;
 	private AdjustSpeedAsTravelMotionControlHelper m_AdjustSpeedAsTravelArcHelper;
     private MotionControlPIDController m_ArcDistancePIDController; 
 
 
-    
+    private PIDOutputArcMotion m_ArcRotationPIDOutput;
 
 //    private double m_TurnTolerance = 5;// had been 0.5		
 //    private double m_AngularVelocityTolerance = 15;
@@ -85,18 +69,37 @@ public class DriveTrainTurnOnCircleToAngle extends CommandBase {
 /**
  *  This is the new Constructor we want to code Up 
  * @param theDriveTrain
- * @param maxSpeed   Postive means clockwise Rotation, Negative means counterclockwise rotation
- * @param turnToAngle
- * @param circleRadius
- */   public DriveTrainTurnOnCircleToAngle(DriveTrain theDriveTrain, double maxSpeed, double turnToAngle, double circleRadius){
+ * @param rampUp in inches distance to get to the maxSpeed
+ * @param maxSpeed   ft/sec
+ * @param rampDown in inches distance to get from maxSpeed down to slow speed at target distance (calculate from target angle & circleRadius)
+ * @param turnToAngle postive from current Angle would mean clockwise rotation
+ * @param circleRadius in inches
+ */   public DriveTrainTurnOnCircleToAngle(DriveTrain theDriveTrain, double rampUp, double maxSpeed, double rampdown, double turnToAngle, double circleRadius){
 
+    // Determine:
+    //    the distance to travel and 
+    //    the direction (forward or backward) and 
+    //    clockwise or counter clockwise
+    //=============================================================================
+        double currentAngle = theDriveTrain.getGyro().getAngle();
 
-        m_DriveTrain = theDriveTrain;
-    
-        addRequirements(m_DriveTrain);
-        m_leftEncoder    = theDriveTrain.getEncoderLeft();
-        m_rightEncoder   = theDriveTrain.getEncoderRight();
-        m_rotationSource = theDriveTrain.getGyro();
+        //Calculate length of arc on the cirle we are to traverse
+        double archAngle = turnToAngle-currentAngle;
+        double distanceToTravel = circleRadius *2*java.lang.Math.PI*(archAngle/360);
+
+        if(maxSpeed>0){
+            if(archAngle>0){
+                //So we are being asked to go clockwise (maxSpeed positive), and increase our Angle, which we can do by going forwar and turning to the right
+                distanceToTravel = -circleRadius *2*java.lang.Math.PI; //TODO not have negative but for this robot negative is forward
+            }else{
+               //So we are being asked to go clockwise (maxSpeed positive), and decrease our Angle, which we cant do by going forwar and turning to the right
+ 
+            }
+
+        }
+        else{
+
+        }
      
         m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
 //        m_TurnSource = m_rotationSource;
@@ -128,6 +131,31 @@ public class DriveTrainTurnOnCircleToAngle extends CommandBase {
     @Override
     public void initialize() {
 	{
+        m_LineSource.reset();
+			
+        double start = 0;
+        
+        double convertedDistance = m_distance;	// Inches
+        double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
+        double convertedRamp = m_ramp;			// Inches/Second
+        
+//			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
+//			{
+            // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
+            m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
+
+            // FORWARD POWER, will have two parts, a guess of the motor power needed plus PID control to try and get to actaul speed requesting
+            // so 20% min power to move (deadzone)
+            // assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
+            m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
+
+            //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
+            m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
+                                                                                             start, m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
+            //Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
+            m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
+            m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
+//			}
 
 	}
 
@@ -156,9 +184,17 @@ public class DriveTrainTurnOnCircleToAngle extends CommandBase {
 			double convertedRamp = m_ramp; 			// in inches
 			
 
-new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), m_radiusOfArc);
+//			//Instantiates a new MotionControlHelper() object for the new Arch segment
+//			//Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
+//			m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
+//			m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, m_StraightSource, m_StraightRotationPIDOutput);
+			// motionControlForwardSpeed
+			m_ArcRotationPIDOutput         = new PIDOutputArcMotion(m_DriveTrain, new GyroAngleAsDouble(m_TurnSource), m_radiusOfArc);
+            m_AngleRotationPID
 			m_AdjustSpeedAsTravelArcHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, start, 
-			                                                                            m_LineSource/*m_ArcRotationPIDOutput*/);
+			                                                                            m_LineSource//,
+																						 //m_ArcRotationPIDOutput
+                                                                                         );
 			
 //			//Instantiates a new MotionControlPIDController() object for the new drive segment using the previous MotionControlHelper()
 //			m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);

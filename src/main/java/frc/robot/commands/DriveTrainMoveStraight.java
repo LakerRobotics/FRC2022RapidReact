@@ -38,9 +38,9 @@ public class DriveTrainMoveStraight extends CommandBase {
     private SimpleMotorFeedforward m_simpleMotorFeedForward;
 
     private boolean isStraightMovingForward = true;
-    private final double StraightKp = 0.006;// 0.020;
-    private final double StraightKi = 0.008;//0.001;
-    private final double StraightKd = 0.0;
+    public final double StraightKp = 0.006;// 0.020;
+    public final double StraightKi = 0.008;//0.001;
+    public final double StraightKd = 0.0;
 //    private final double StraightMaxPower = 1;
 
 /** 
@@ -78,12 +78,21 @@ public class DriveTrainMoveStraight extends CommandBase {
         }
 
     }
+/**
+ * 
+ * @param currentDistance, 
+ * @return the target Angle in degree for the provided distance, note in the base drive straight this is always just the passed in straight angle
+ *         but in a derived class like turn on a circle it would but updated for each distance
+ */
+    private double getTargetAngle(double currentDistance){
+        return m_targetAngle;
+    };
+
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
 	{
-        System.out.println("DriveTrainMoveStraight.initialize Entered");
             m_LineSource.reset();
 			
 			double start = 0;
@@ -115,8 +124,8 @@ public class DriveTrainMoveStraight extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
-        
+
+
         double distanceSoFar = m_LineSource.getDistance();
         double targetSpeed   = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
         double currentSpeed  = m_LineSource.getRate();
@@ -126,18 +135,18 @@ public class DriveTrainMoveStraight extends CommandBase {
         double forwardPower = firstGuessAtMotorPower + pidTuneForwardPower;
     
         double angleRightNow = m_TurnSource.getAngle();
-        double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,m_targetAngle);
+        double targetAngle = getTargetAngle(distanceSoFar);
+        double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,targetAngle);
 
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
 
-        
+        SmartDashboard.putNumber("DriveStraight Target distance", m_DistanceToExceed);
         SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
         SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
         SmartDashboard.putNumber("DriveStraight currentSpeed", currentSpeed);
         SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
         SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
         SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
-        
     }
 
     // Called once the command ends or is interrupted.
