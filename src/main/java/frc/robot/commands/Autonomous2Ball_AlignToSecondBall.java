@@ -46,16 +46,16 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
        CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
                                               new ShooterMoveLow(shooter),
                                               new IntakeMove(theIntake),
-                                              new ConveyorMove(theConveyor)).withTimeout(2.5);
+                                              new ConveyorMove(theConveyor)).withTimeout(1.5);
         addCommands(spinAndShootAndintake);
 
        // Turn Around
        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));   
        
 
-       // Now that we are facing a ball on the gound turn on intake and drive towards it
+       // Now that we are facing a ball on the ground turn on intake and drive towards it
        ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
-           new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 10/* Should be 1*/ /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
+           new DriveTrainMoveStraight(theDriveTrain, -105 /*Distance*/, 10/* Should be 1*/ /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/),
            new IntakeMove(theIntake)
            );  
         addCommands(driveForwardWithIntake);
@@ -68,13 +68,13 @@ public class Autonomous2Ball_AlignToSecondBall extends SequentialCommandGroup {
         // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
         ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
                                             new ShooterMoveLow(shooter),
-                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 10 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 359 /*Angle to drive straight on*/)
+                                            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 10 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, 359 /*Angle to drive straight on*/)
                                             );
         addCommands(driveAndSpinUpShooter);
 
         CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(
                                             new ShooterMoveLow(shooter),
-                                            new ConveyorMove(theConveyor)).withTimeout(5);
+                                            new ConveyorMove(theConveyor)).withTimeout(2);
         addCommands(spinAndShoot);
 
         // Drive off the tarmac

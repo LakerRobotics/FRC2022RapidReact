@@ -36,14 +36,21 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
    // Turn on Intake
    // go forward 50"
    // pick up the ball
-   ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
-    new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
-    new IntakeMove(theIntake)
+   ParallelRaceGroup driveForwardWithIntakeShooter = new ParallelRaceGroup(        
+    new DriveTrainMoveStraight(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
+    new IntakeMove(theIntake),
+    new ShooterMoveLow(shooter)
     );  
-    addCommands(driveForwardWithIntake);
+    addCommands(driveForwardWithIntakeShooter);
 
    // turn around to face hub
-   addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
+   //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
+
+   ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
+    new DriveTrainTurnSpinToAngle(theDriveTrain, 180)
+    //new ShooterMoveLow(shooter)
+   );
+   addCommands(turnWithFlywheel);
 
    // go forward 50"
    // turn on shooter 
@@ -51,7 +58,7 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
    ParallelRaceGroup driveForwardWithShooter = new ParallelRaceGroup(        
     new ShooterMoveLow(shooter),
     new IntakeMove(theIntake),
-    new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
+    new DriveTrainMoveStraight(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
     );
     addCommands(driveForwardWithShooter);
 
