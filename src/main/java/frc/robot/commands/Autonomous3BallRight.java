@@ -52,12 +52,12 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
    // go forward 50"
    // turn on shooter 
    // wait for shooter to charge up then move ball up on the conveytor
-   ParallelRaceGroup driveForwardWithShooter = new ParallelRaceGroup(        
+   ParallelRaceGroup driveForwardWithShooter70 = new ParallelRaceGroup(        
     new ShooterMoveLow(shooter),
     new IntakeMove(theIntake),
     new DriveTrainMoveStraight(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
     );
-    addCommands(driveForwardWithShooter);
+    addCommands(driveForwardWithShooter70);
 
    //shoot the ball 
    CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
@@ -66,6 +66,40 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
     new ConveyorMove(theConveyor)).withTimeout(3);
     addCommands(spinAndShootAndintake);
 
+        //Turn clockwise (180 + 50) degrees
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 230/*TurnToAngle*/));
+
+        //Drive 120 inches with intake
+       ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
+        new DriveTrainMoveStraight(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 230 /*Angle to drive straight on*/),
+        new IntakeMove(theIntake)
+        );
+        addCommands(driveForwardWithIntake120);
+    
+        //Turn around clockwise (230 + 150) degrees
+    
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, (230 + 150)));
+    
+        //Drive 50 inches with shooter for long shot
+
+        ParallelRaceGroup driveForwardWithShooter50 = new ParallelRaceGroup(        
+        new ShooterMoveLow(shooter),
+        new IntakeMove(theIntake),
+        new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (230 + 150) /*Angle to drive straight on*/)
+        );
+    
+        addCommands(driveForwardWithShooter50);
+    
+        //Engage conveyor and keep shooter at consistent speed
+    
+        ParallelRaceGroup spinAndShootLong = new ParallelRaceGroup(
+        new ShooterMoveHigh(shooter),
+        new ConveyorMove(theConveyor)
+        );
+        addCommands(spinAndShootLong);
+
     }
+
+
 
 }
