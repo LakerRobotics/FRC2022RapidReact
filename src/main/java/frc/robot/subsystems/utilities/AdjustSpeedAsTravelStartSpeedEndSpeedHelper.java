@@ -52,7 +52,7 @@ public class AdjustSpeedAsTravelStartSpeedEndSpeedHelper extends AdjustSpeedAsTr
     		m_ramp = 0;
     	} 
     	else {
-    		m_ramp = m_endSpeed - m_startSpeed / (m_endDistance-m_startDistance);
+    		m_ramp = (m_endSpeed - m_startSpeed )/ (m_endDistance-m_startDistance);
     	}    	
     }
 
