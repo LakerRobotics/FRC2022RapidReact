@@ -1,3 +1,6 @@
+package frc.robot.commands;
+
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
