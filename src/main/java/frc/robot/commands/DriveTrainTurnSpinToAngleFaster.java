@@ -1,18 +1,20 @@
 package frc.robot.commands;
+
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
+//import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
+import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelperWithMinSpeed;
 import frc.robot.subsystems.utilities.GyroAngleAsDouble;
 import frc.robot.subsystems.utilities.MotionControlPIDController;
 
 /**
  *
  */
-public class DriveTrainTurnSpinToAngle extends CommandBase {
+public class DriveTrainTurnSpinToAngleFaster  extends CommandBase {
     private final DriveTrain m_DriveTrain;
 
     RelativeEncoder m_leftEncoder; 
@@ -22,11 +24,11 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 	private Gyro m_TurnSource;
     private double m_targetAngle;
     
-    private AdjustSpeedAsTravelMotionControlHelper m_AdjustRpmAsTurnHelper;
+    private AdjustSpeedAsTravelMotionControlHelperWithMinSpeed m_AdjustRpmAsTurnHelper;
 
 	private MotionControlPIDController m_TurnPIDController;
 
-    private double m_TurnTolerance = 5;// had been 0.5		
+    private double m_TurnTolerance;// = 5;// had been 0.5		
     private double m_AngularVelocityTolerance = 15;
 
 	private final double TurnKp = 0.005;
@@ -38,11 +40,13 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 /** 
     * @param theDriveTrain the drivetrain subsystem
     * @param turnToAngle In Degrees, in some field reference fram, like lookig downfield is 0 derees
+    * @param turnAccuracy in degrees
     ------------------------------------------------*/
-   public DriveTrainTurnSpinToAngle(DriveTrain theDriveTrain, double turnToAngle){
+   public DriveTrainTurnSpinToAngleFaster(DriveTrain theDriveTrain, double turnToAngle, double accuracy){
         m_DriveTrain = theDriveTrain;
         m_TurnSource = theDriveTrain.getGyro();
         m_targetAngle = turnToAngle;
+        m_TurnTolerance = accuracy;
     }
 
     // Called when the command is initially scheduled.
@@ -52,14 +56,17 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 		// create a forward motion PID control on that then you can get precise turning.
 		double start = m_TurnSource.getAngle();
 		
-		double maxRPM = 60/*30*/;			// Rotations/Minute
+		double maxRPM = 120/*30*/;			// Rotations/Minute
+        double minRPM = m_TurnTolerance/0.02;// so accuracy dividec by 0.02 or 20 milliseconds, which is how ofter the robot does updates
+               minRPM = m_TurnTolerance/4;// Factor of safty to get us to the design Turn Tolerance
 		double ramp = 30/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
 		double maxSpeed = maxRPM * 6; // 360 Degrees/60 seconds to convert RPM to speed or degrees per second
 		
 //		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
 			//Instantiates a new MotionControlHelper() object for the new turn segment
-			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
-			                                                                      new GyroAngleAsDouble(m_TurnSource)/*new PIDOutputDriveTurn(m_DriveTrain)*/);
+			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelperWithMinSpeed(m_targetAngle, ramp, maxSpeed, start, 
+			                                                                      new GyroAngleAsDouble(m_TurnSource),/*new PIDOutputDriveTurn(m_DriveTrain)*/
+                                                                                  minRPM);
 			//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
 			m_TurnPIDController = new MotionControlPIDController(TurnKp, TurnKi, TurnKd, m_AdjustRpmAsTurnHelper);
 				
@@ -108,4 +115,5 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
     public boolean runsWhenDisabled() {
         return false;
     }
+
 }
