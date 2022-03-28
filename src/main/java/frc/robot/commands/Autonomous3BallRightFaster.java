@@ -10,7 +10,6 @@ package frc.robot.commands;
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
