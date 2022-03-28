@@ -18,7 +18,7 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
     double m_currentMeasuredDistance  = 0.0d;
     double m_initialMeasuredDistance  = 0.0d;
  
-   	public double percentDeadZoneOverride = 0.15;//enter portion of 1 (e.g. .1 for 10%)
+ //  	public double percentDeadZoneOverride = 0.15;//enter portion of 1 (e.g. .1 for 10%)
    	
    
 	/**

@@ -22,8 +22,8 @@ public class DriveTrainMoveStraight extends CommandBase {
     RelativeEncoder m_rightEncoder; 
     Gyro m_rotationSource;
 
-    private EncoderAvgLeftRight m_LineSource;
-	private Gyro m_TurnSource;
+    protected EncoderAvgLeftRight m_LineSource;
+	protected Gyro m_TurnSource;
     private double m_distance;
     private double m_DistanceToExceed; //TODO Check if can Eliminate this redudent variable
     private double m_maxspeed;
@@ -62,14 +62,21 @@ public class DriveTrainMoveStraight extends CommandBase {
      
         m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
         m_TurnSource = m_rotationSource;
-        m_distance = distance;
-        m_DistanceToExceed = m_distance; //TODO check if can eliminate this duplicate varable
         m_maxspeed = maxspeed;
         m_ramp = ramp;
         m_targetAngle = targetAngle;
 
         m_StraightTolerance = 0.5;
 
+        // 
+        setDistance(distance);
+
+
+    }
+     
+    public void setDistance(double distance){
+        m_distance = distance;
+        m_DistanceToExceed = m_distance; //TODO check if can eliminate this duplicate varable
         if(distance > 0){
             isStraightMovingForward = true;
         }
@@ -84,7 +91,7 @@ public class DriveTrainMoveStraight extends CommandBase {
  * @return the target Angle in degree for the provided distance, note in the base drive straight this is always just the passed in straight angle
  *         but in a derived class like turn on a circle it would but updated for each distance
  */
-    private double getTargetAngle(double currentDistance){
+    protected double getTargetAngle(double currentDistance){
         return m_targetAngle;
     };
 
