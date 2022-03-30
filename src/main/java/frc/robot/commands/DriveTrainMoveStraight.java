@@ -66,7 +66,7 @@ public class DriveTrainMoveStraight extends CommandBase {
         m_ramp = ramp;
         m_targetAngle = targetAngle;
 
-        m_StraightTolerance = 0.5;
+        m_StraightTolerance = 2;
 
         // 
         setDistance(distance);
@@ -119,7 +119,10 @@ public class DriveTrainMoveStraight extends CommandBase {
                 m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
 
                 //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
-                m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(convertedDistance, convertedRamp, convertedSpeed, 
+                m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(
+                    convertedDistance
+                    +(convertedDistance/java.lang.Math.abs(convertedDistance)*m_StraightTolerance)
+                     ,convertedRamp, convertedSpeed, 
 				                                                                                 start, m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
 				//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
 				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);

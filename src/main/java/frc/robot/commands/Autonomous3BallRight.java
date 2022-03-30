@@ -33,7 +33,7 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
    // go forward 50"
    // pick up the ball
    ParallelRaceGroup driveForwardWithIntakeShooter = new ParallelRaceGroup(        
-    new DriveTrainMoveStraight(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
+    new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
     new IntakeMove(theIntake),
     new ShooterMoveLow(shooter)
     );  
@@ -54,7 +54,7 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
    ParallelRaceGroup driveForwardWithShooter70 = new ParallelRaceGroup(        
     new ShooterMoveLow(shooter),
     new IntakeMove(theIntake),
-    new DriveTrainMoveStraight(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
+    new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
     );
     addCommands(driveForwardWithShooter70);
 
@@ -62,29 +62,29 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
    CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
     new ShooterMoveLow(shooter),
     new IntakeMove(theIntake),
-    new ConveyorMove(theConveyor)).withTimeout(3);
+    new ConveyorMove(theConveyor)).withTimeout(2);
     addCommands(spinAndShootAndintake);
 
         //Turn clockwise (180 + 50) degrees
-        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 230/*TurnToAngle*/));
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180+240/*TurnToAngle*/));
 
         //Drive 120 inches with intake
        ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
-        new DriveTrainMoveStraight(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 230 /*Angle to drive straight on*/),
+        new DriveTrainMoveStraight(theDriveTrain, -120 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, 180+240 /*Angle to drive straight on*/),
         new IntakeMove(theIntake)
         );
         addCommands(driveForwardWithIntake120);
     
         //Turn around clockwise (230 + 150) degrees
     
-        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, (230 + 150)));
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, (180+240 + 155)));
     
         //Drive 50 inches with shooter for long shot
 
         ParallelRaceGroup driveForwardWithShooter50 = new ParallelRaceGroup(        
         new ShooterMoveLow(shooter),
         new IntakeMove(theIntake),
-        new DriveTrainMoveStraight(theDriveTrain, -50 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (230 + 150) /*Angle to drive straight on*/)
+        new DriveTrainMoveStraight(theDriveTrain, -60 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, (180+240 + 155) /*Angle to drive straight on*/)
         );
     
         addCommands(driveForwardWithShooter50);
@@ -92,7 +92,7 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
         //Engage conveyor and keep shooter at consistent speed
     
         ParallelRaceGroup spinAndShootLong = new ParallelRaceGroup(
-        new ShooterMoveHigh(shooter),
+        new ShooterMoveMed(shooter),
         new ConveyorMove(theConveyor)
         );
         addCommands(spinAndShootLong);

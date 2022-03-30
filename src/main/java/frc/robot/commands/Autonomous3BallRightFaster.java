@@ -67,25 +67,25 @@ public class Autonomous3BallRightFaster  extends SequentialCommandGroup {
     addCommands(spinAndShootAndintake);
 
         //Turn clockwise (180 + 50) degrees
-        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, 230/*TurnToAngle*/, 5 /*Degree accuracy*/));
+        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, 250/*TurnToAngle*/, 5 /*Degree accuracy*/));
 
         //Drive 120 inches with intake
        ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
-        new DriveTrainMoveStraightFaster(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 230 /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/),
+        new DriveTrainMoveStraightFaster(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180+250 /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/),
         new IntakeMove(theIntake)
         );
         addCommands(driveForwardWithIntake120);
     
         //Turn around clockwise (230 + 150) degrees
     
-        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, (230 + 150), 5 /* Dgree accuracy*/));
+        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, (180+250 + 150), 5 /* Dgree accuracy*/));
     
         //Drive 50 inches with shooter for long shot
 
         ParallelRaceGroup driveForwardWithShooter50 = new ParallelRaceGroup(        
         new ShooterMoveLow(shooter),
         new IntakeMove(theIntake),
-        new DriveTrainMoveStraightFaster(theDriveTrain, -50 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (230 + 150) /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/)
+        new DriveTrainMoveStraightFaster(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (180 +250 + 150) /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/)
         );
     
         addCommands(driveForwardWithShooter50);
@@ -93,7 +93,7 @@ public class Autonomous3BallRightFaster  extends SequentialCommandGroup {
         //Engage conveyor and keep shooter at consistent speed
     
         ParallelRaceGroup spinAndShootLong = new ParallelRaceGroup(
-        new ShooterMoveHigh(shooter),
+        new ShooterMoveLow(shooter),
         new ConveyorMove(theConveyor)
         );
         addCommands(spinAndShootLong);

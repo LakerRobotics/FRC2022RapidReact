@@ -52,13 +52,15 @@ public class DriveTrainTurnSpinToAngle extends CommandBase {
 		// create a forward motion PID control on that then you can get precise turning.
 		double start = m_TurnSource.getAngle();
 		
-		double maxRPM = 60/*30*/;			// Rotations/Minute
-		double ramp = 30/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
+		double maxRPM = 90/*30*/;			// Rotations/Minute
+		double ramp = 45/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
 		double maxSpeed = maxRPM * 6; // 360 Degrees/60 seconds to convert RPM to speed or degrees per second
 		
 //		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
 			//Instantiates a new MotionControlHelper() object for the new turn segment
-			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle, ramp, maxSpeed, start, 
+			m_AdjustRpmAsTurnHelper = new AdjustSpeedAsTravelMotionControlHelper(m_targetAngle
+            +(m_targetAngle/java.lang.Math.abs(m_targetAngle)*m_TurnTolerance)
+            , ramp, maxSpeed, start, 
 			                                                                      new GyroAngleAsDouble(m_TurnSource)/*new PIDOutputDriveTurn(m_DriveTrain)*/);
 			//Instantiates a new MotionControlPIDController() object for the new turn segment using the previous MotionControlHelper()
 			m_TurnPIDController = new MotionControlPIDController(TurnKp, TurnKi, TurnKd, m_AdjustRpmAsTurnHelper);
