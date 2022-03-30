@@ -53,7 +53,7 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
     * @param maxSpeed  in ft/sec
     * @param ramp      in inches
     * @param targetAngle assume it want Degrees
-    * @param targetToleracne provided in inches, the speed will be adjusted based on this target tolerance, so should hit the target
+    * @param targetTolerance provided in inches, the speed will be adjusted based on this target tolerance, so should exceed the target within the tolerance
     ------------------------------------------------*/
    public DriveTrainMoveStraightFaster(DriveTrain theDriveTrain, double distance, double maxspeed, double ramp, double targetAngle, double targetTolerance){
 
@@ -93,8 +93,8 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
 			
 			double convertedDistance = m_distance;	// Inches
 			double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
-			double convertedRamp = m_ramp;			// Inches/Second
-            double minSpeed = m_StraightTolerance/0.02; /*seconds the typical sampeling speed or time between when measurements are taken*/
+			double convertedRamp = m_ramp;			// (Inches/Second)/inches, i.e. change-in-velocity/distance or velocity/distance
+            double minSpeed = m_StraightTolerance/0.02; /* inches/seconseconds the typical sampeling speed or time between when measurements are taken*/
             minSpeed = minSpeed/4; // Add a factor of safty so should hit target withinspecified tolerance
 			
 //			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
@@ -176,12 +176,7 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
                 didExceedDistance = false;
             }
         }
-        if(didExceedDistance){
-            if(m_StraightDistancePIDController != null) {
-            }
-            return true;
-        }
-        return false;
+        return didExceedDistance;
     }
 
     @Override

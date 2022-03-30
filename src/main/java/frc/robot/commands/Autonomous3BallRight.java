@@ -29,71 +29,66 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
         //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
         addCommands(new GyroReset(theDriveTrain));
-   // Turn on Intake
-   // go forward 50"
-   // pick up the ball
-   ParallelRaceGroup driveForwardWithIntakeShooter = new ParallelRaceGroup(        
-    new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
-    new IntakeMove(theIntake),
-    new ShooterMoveLow(shooter)
-    );  
-    addCommands(driveForwardWithIntakeShooter);
+        // Turn on Intake
+        // go forward 50"
+        // pick up the ball
+        ParallelRaceGroup driveForwardWithIntakeShooter = new ParallelRaceGroup(        
+            new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/),
+            new IntakeMove(theIntake),
+            new ShooterMoveLow(shooter)
+        );  
+        addCommands(driveForwardWithIntakeShooter);
 
-   // turn around to face hub
-   //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
+        // turn around to face hub
+        //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
+        ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
+            new DriveTrainTurnSpinToAngle(theDriveTrain, 180),
+            new ShooterMoveLow(shooter)
+        );
+        addCommands(turnWithFlywheel);
 
-   ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
-    new DriveTrainTurnSpinToAngle(theDriveTrain, 180)
-    //new ShooterMoveLow(shooter)
-   );
-   addCommands(turnWithFlywheel);
+        // go forward 50"
+        // turn on shooter 
+        // wait for shooter to charge up then move ball up on the conveytor
+        ParallelRaceGroup driveForwardWithShooter70 = new ParallelRaceGroup(        
+            new ShooterMoveLow(shooter),
+            new IntakeMove(theIntake),
+            new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
+            );
+        addCommands(driveForwardWithShooter70);
 
-   // go forward 50"
-   // turn on shooter 
-   // wait for shooter to charge up then move ball up on the conveytor
-   ParallelRaceGroup driveForwardWithShooter70 = new ParallelRaceGroup(        
-    new ShooterMoveLow(shooter),
-    new IntakeMove(theIntake),
-    new DriveTrainMoveStraight(theDriveTrain, -75 /*Distance*/, 7 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180 /*Angle to drive straight on*/)
-    );
-    addCommands(driveForwardWithShooter70);
-
-   //shoot the ball 
-   CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
-    new ShooterMoveLow(shooter),
-    new IntakeMove(theIntake),
-    new ConveyorMove(theConveyor)).withTimeout(2);
-    addCommands(spinAndShootAndintake);
+        //shoot the balls 
+        CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
+            new ShooterMoveLow(shooter),
+            new IntakeMove(theIntake),
+            new ConveyorMove(theConveyor)).withTimeout(2);
+        addCommands(spinAndShootAndintake);
 
         //Turn clockwise (180 + 50) degrees
         addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180+240/*TurnToAngle*/));
 
         //Drive 120 inches with intake
-       ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
-        new DriveTrainMoveStraight(theDriveTrain, -120 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, 180+240 /*Angle to drive straight on*/),
-        new IntakeMove(theIntake)
+        ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
+            new DriveTrainMoveStraight(theDriveTrain, -120 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, 180+240 /*Angle to drive straight on*/),
+            new IntakeMove(theIntake)
         );
         addCommands(driveForwardWithIntake120);
     
-        //Turn around clockwise (230 + 150) degrees
-    
+        //Turn around clockwise (230 + 150) degree
         addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, (180+240 + 155)));
     
         //Drive 50 inches with shooter for long shot
-
         ParallelRaceGroup driveForwardWithShooter50 = new ParallelRaceGroup(        
-        new ShooterMoveLow(shooter),
-        new IntakeMove(theIntake),
-        new DriveTrainMoveStraight(theDriveTrain, -60 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, (180+240 + 155) /*Angle to drive straight on*/)
+            new ShooterMoveMed(shooter),
+            new IntakeMove(theIntake),
+            new DriveTrainMoveStraight(theDriveTrain, -60 /*Distance*/, 7 /*maxSpeed ft/sec*/, 15 /*inch to get to maxSpeed*/, (180+240 + 155) /*Angle to drive straight on*/)
         );
-    
         addCommands(driveForwardWithShooter50);
     
         //Engage conveyor and keep shooter at consistent speed
-    
         ParallelRaceGroup spinAndShootLong = new ParallelRaceGroup(
-        new ShooterMovMed(shooter),
-        new ConveyorMove(theConveyor)
+            new ShooterMoveMed(shooter),
+            new ConveyorMove(theConveyor)
         );
         addCommands(spinAndShootLong);
 

@@ -57,10 +57,10 @@ public class DriveTrainTurnSpinToAngleFaster  extends CommandBase {
 		double start = m_TurnSource.getAngle();
 		
 		double maxRPM = 120/*30*/;			// Rotations/Minute
-        double minRPM = m_TurnTolerance/0.02;// so accuracy dividec by 0.02 or 20 milliseconds, which is how ofter the robot does updates
-               minRPM = m_TurnTolerance/4;// Factor of safty to get us to the design Turn Tolerance
-		double ramp = 30/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
+		double ramp = 45/* 3.5 * maxRPM*/;	//angle off from target to start slowing down.			
 		double maxSpeed = maxRPM * 6; // 360 Degrees/60 seconds to convert RPM to speed or degrees per second
+        double minRPM = (m_TurnTolerance/360)/(0.02/60);// so accuracy (converting Degrees to Revolutions) divide by 0.02 or 20 milliseconds, converted to Min by dividing by 60, which is how ofter the robot does updates
+               minRPM = m_TurnTolerance/4;// Factor of safty to get us to detect and stop on the the design Turn Tolerance
 		
 //		if (!(Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance)){
 			//Instantiates a new MotionControlHelper() object for the new turn segment
@@ -105,6 +105,7 @@ public class DriveTrainTurnSpinToAngleFaster  extends CommandBase {
             if (Math.abs(m_TurnSource.getAngle()-m_targetAngle) < m_TurnTolerance  &&
                 Math.abs(m_TurnSource.getRate()               ) < m_AngularVelocityTolerance)
             {
+                //Stop
                 m_DriveTrain.tankDrive(0, 0);// ArcadeDrive(0, 0);
                 return true;
             }

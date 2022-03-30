@@ -19,7 +19,6 @@ public class AutonomousTestCircle extends SequentialCommandGroup {
                                                          10,   /* inches ramp Down */
                                                          360,  /* Target angle, i.e. when it will end traveling on the circle*/
                                                          36,   /* inch radius of the Circle*/
-                                                         true, /* Turn Right (if false turns left)*/
                                                          true  /* forward (if false goes backward*/
                                                     )
                     );                                     
