@@ -52,7 +52,6 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
        
        // get the    going in the right direction
        double gapEnd = m_targetDistance-currentMeasuredDistance;
-       double rampDown = m_rampUpRampDownDistance;
        if(gapEnd == 0) 
        {
     	   targetSpeed = 0;
@@ -84,6 +83,7 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
 
        
        // Calculate reduction to the speed if we are at the end
+       double rampDown = m_rampUpRampDownDistance;
        double percentRampDown = Math.abs(gapEnd)/rampDown;
        if (Math.abs(percentRampDown)>1)  percentRampDown = 1; // limit percent to 100%
 

@@ -92,7 +92,7 @@ public class Autonomous3BallRight extends SequentialCommandGroup {
         //Engage conveyor and keep shooter at consistent speed
     
         ParallelRaceGroup spinAndShootLong = new ParallelRaceGroup(
-        new ShooterMoveMed(shooter),
+        new ShooterMovMed(shooter),
         new ConveyorMove(theConveyor)
         );
         addCommands(spinAndShootLong);
