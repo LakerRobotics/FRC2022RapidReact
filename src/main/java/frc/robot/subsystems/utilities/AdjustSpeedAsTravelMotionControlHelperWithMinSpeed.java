@@ -107,8 +107,8 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
            targetSpeed = (targetSpeed/Math.abs(targetSpeed))/*this just gets us the sign +1 or -1 so slow speed will go in the coreect direction*/
            *m_slowestSpeed;
        }
-       SmartDashboard.putNumber("targetSpeed",targetSpeed);       
-       SmartDashboard.putNumber("getTargetSpeed MotionControlHelper", targetSpeed);
+       SmartDashboard.putNumber("AdjSpeedAsTravelWithMinSpeed targetSpeed",targetSpeed);       
+       SmartDashboard.putNumber("AdjSpeedAsTravelWithMinSpeed slowestSpeed", m_slowestSpeed);
        return targetSpeed;
     }
 
