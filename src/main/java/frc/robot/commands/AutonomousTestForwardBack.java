@@ -37,46 +37,8 @@ public class AutonomousTestForwardBack extends SequentialCommandGroup {
 
         addCommands(new GyroReset(theDriveTrain));
 
-    //Spin up the shooter for Short Shot
-        addCommands(new ShooterMoveLow(shooter).withTimeout(2));                                     
- 
-    // Shoot and run the intake to deploy
-       CommandGroupBase spinAndShootAndintake = SequentialCommandGroup.parallel(
-                                              new ShooterMoveLow(shooter),
-                                              new IntakeMove(theIntake),
-                                              new ConveyorMove(theConveyor)).withTimeout(5);
-        addCommands(spinAndShootAndintake);
-
-       // Turn Around
-       //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));                                     
-
-       // Now that we are facing a ball on the gound turn on intake and drive towards it
-       ParallelRaceGroup driveAndSpinUpShooter = new ParallelRaceGroup(
-                                            new ShooterMoveLow(shooter).withTimeout(5),
-                                            new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 1 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/)
-                                            );
-        addCommands(driveAndSpinUpShooter);
-       
-
-        //Turn back toward Hub,now that we have picked up the ball from the ground
-        //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 359));
-        
-        // Drive towards the Hub, back to where we shot the first ball from
-        // CommandGroupBase driveAndSpinUpShooter = SequentialCommandGroup.parallel(
-        ParallelRaceGroup driveForwardWithIntake = new ParallelRaceGroup(        
-            new IntakeMove(theIntake).withTimeout(5),
-            new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/)
-           );  
-        addCommands(driveForwardWithIntake);
-        
-
-        /*CommandGroupBase spinAndShoot = SequentialCommandGroup.parallel(
-                                            new ShooterMoveLow(shooter),
-                                            new ConveyorMove(theConveyor)).withTimeout(5);
-        addCommands(spinAndShoot);*/
-
-        // Drive off the tarmac
-        addCommands(new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 2 /*maxSpeed ft/sec*/, 2 /*inch to get to maxSpeed*/, 360 /*Angle to drive straight on*/));
+        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, 100 /*Distance*/, 3 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */ ));
+        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, -100 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */));  
     }
 
 }
