@@ -43,11 +43,12 @@ public class Autonomous3BallRightFaster  extends SequentialCommandGroup {
         // turn around to face hub  
         //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
 
-        ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
-            new DriveTrainTurnSpinToAngleFaster(theDriveTrain, 180, 1 /*Degrees Accuracy*/),
-            new ShooterMoveLow(shooter)
-        );
-        addCommands(turnWithFlywheel);
+//        ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
+//            new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*, 1 /*Degrees Accuracy*/)
+            //,new ShooterMoveLow(shooter)
+//        );
+//        addCommands(turnWithFlywheel);
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*, 1 /*Degrees Accuracy*/));
 
         // go forward 50"
         // turn on shooter 
@@ -68,23 +69,23 @@ public class Autonomous3BallRightFaster  extends SequentialCommandGroup {
         addCommands(spinAndShootAndintake);
 
         //Turn clockwise (180 + 50) degrees
-        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, 250/*TurnToAngle*/, 1 /*Degree accuracy*/));
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180+240/*TurnToAngle*//*, 1 /*Degree accuracy*/));
 
         //Drive 120 inches with intake
         ParallelRaceGroup driveForwardWithIntake120 = new ParallelRaceGroup(
-            new DriveTrainMoveStraightFaster(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180+250 /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/),
+            new DriveTrainMoveStraightFaster(theDriveTrain, -120 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 180+240 /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/),
             new IntakeMove(theIntake)
         );
         addCommands(driveForwardWithIntake120);
     
         //Turn around clockwise (230 + 150) degrees
-        addCommands(new DriveTrainTurnSpinToAngleFaster(theDriveTrain, (180+250 + 150), 1 /* Degree accuracy*/));
+        addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, (180+240 + 150)/*, 1 /* Degree accuracy*/));
     
         //Drive 50 inches with shooter for long shot
         ParallelRaceGroup driveForwardWithShooter50 = new ParallelRaceGroup(        
             new ShooterMoveLow(shooter),
             new IntakeMove(theIntake),
-            new DriveTrainMoveStraightFaster(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (180 +250 + 150) /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/)
+            new DriveTrainMoveStraightFaster(theDriveTrain, -70 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, (180 +240 + 150) /*Angle to drive straight on*/, 0.5/*inchs Accuracy*/)
         );
         addCommands(driveForwardWithShooter50);
     
