@@ -36,9 +36,10 @@ public class AutonomousTestForwardBack extends SequentialCommandGroup {
     //Reset the Gyro
 
         addCommands(new GyroReset(theDriveTrain));
-
-        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, 100 /*Distance*/, 3 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */ ));
-        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, -100 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */));  
+        addCommands( new DriveTrainMoveStraight(theDriveTrain, 100 /*Distance*/, 3 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/ ));
+        addCommands( new DriveTrainMoveStraight(theDriveTrain, -100 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/));  
+//        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, 100 /*Distance*/, 3 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */ ));
+//        addCommands( new DriveTrainMoveStraightFaster(theDriveTrain, -100 /*Distance*/, 5 /*maxSpeed ft/sec*/, 10 /*inch to get to maxSpeed*/, 0 /*Angle to drive straight on*/, 1 /*Inches Tolerance */));  
     }
 
 }

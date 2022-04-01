@@ -47,8 +47,8 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
    //addCommands(new DriveTrainTurnSpinToAngle(theDriveTrain, 180/*TurnToAngle*/));
 
    ParallelRaceGroup turnWithFlywheel = new ParallelRaceGroup(
-    new DriveTrainTurnSpinToAngle(theDriveTrain, 180),
-    new ShooterMoveLow(shooter)
+    new DriveTrainTurnSpinToAngle(theDriveTrain, 180)
+    //, new ShooterMoveLow(shooter)
    );
    addCommands(turnWithFlywheel);
 

@@ -14,9 +14,10 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
     double m_runningSpeed           = 0.0d; // distance (e.g. inchs or Degrees of rotation) over seconds
     double m_slowestSpeed           = 0.0d; // distance (e.g. inchs or Degrees of rotation) over seconds
 
-	
     double m_currentMeasuredDistance  = 0.0d;
     double m_initialMeasuredDistance  = 0.0d;
+
+    boolean isGoingForward = true;
  
  //  	public double percentDeadZoneOverride = 0.15;//enter portion of 1 (e.g. .1 for 10%)
    	
@@ -40,6 +41,12 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
 //    	m_output = output;
     	m_source = source;
         m_slowestSpeed            = slowestSpeed;
+        if ((m_targetDistance - m_initialMeasuredDistance)<0){
+            isGoingForward=false;
+        }
+        else{
+            isGoingForward = true;
+        }
     }
 
     /**
@@ -48,7 +55,7 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
      * @return
      */
     public double getTargetSpeed(double currentMeasuredDistance){
-       double targetSpeed = 0.0d;       
+       double targetSpeed = m_slowestSpeed;       
        
        // get the    going in the right direction
        double gapEnd = m_targetDistance-currentMeasuredDistance;
@@ -60,6 +67,7 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
        {
     	   targetSpeed = (gapEnd/Math.abs(gapEnd)) * m_runningSpeed; // This just applied +1 or -1 to get the sign right
        }
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_targetSpeed1",targetSpeed);       
        
        // Calculate the reduction to the speed if at the start
        double percentRampUp;
@@ -80,6 +88,7 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
 */
             percentRampUp = Math.abs(gapStart)/m_rampUpRampDownDistance;
         }
+        SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_targetSpeed2",targetSpeed);       
 
        
        // Calculate reduction to the speed if we are at the end
@@ -101,14 +110,20 @@ public class AdjustSpeedAsTravelMotionControlHelperWithMinSpeed  extends AdjustS
        else if(Math.abs(gapEnd) < rampDown){
     	   targetSpeed = percentRampDown * targetSpeed;
        }
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_targetSpeed3",targetSpeed);       
 
        // Minimum slowest speed overide
-       if( Math.abs(targetSpeed)<m_slowestSpeed){
-           targetSpeed = (targetSpeed/Math.abs(targetSpeed))/*this just gets us the sign +1 or -1 so slow speed will go in the coreect direction*/
-           *m_slowestSpeed;
+       if( Math.abs(targetSpeed)<Math.abs(m_slowestSpeed)){
+           if (isGoingForward){
+            targetSpeed = m_slowestSpeed;
+           }else{
+            targetSpeed = -m_slowestSpeed;
+           }
        }
-       SmartDashboard.putNumber("targetSpeed",targetSpeed);       
-       SmartDashboard.putNumber("getTargetSpeed MotionControlHelper", targetSpeed);
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_m_slowestSpeed",m_slowestSpeed);       
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_targetSpeed4",targetSpeed);       
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_percentRampUp", percentRampUp);
+       SmartDashboard.putNumber("AdjustSpeedAsTravel_withMin_percentRampDown", percentRampDown);
        return targetSpeed;
     }
 

@@ -54,7 +54,7 @@ public class DriveTrainMoveForward extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.arcadeDrive(0.80 /*power*/,
+        m_driveTrain.arcadeDrive(0.9/*power*/,
         RobotContainer.getInstance().getDriverController().getRightX() /*turnpower*/
         );
     }

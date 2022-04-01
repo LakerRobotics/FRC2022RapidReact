@@ -86,7 +86,7 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
     @Override
     public void initialize() {
 	{
-        System.out.println("DriveTrainMoveStraight.initialize Entered");
+        System.out.println("DriveTrainMoveStraightFaster.initialize Entered");
             m_LineSource.reset();
 			
 			double start = 0;
@@ -121,6 +121,7 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("DriveTrainMoveStraightFaster.initialize Execute");
         
         
         double distanceSoFar = m_LineSource.getDistance();
@@ -136,13 +137,13 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
 
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
 
-        
-        SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
-        SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
-        SmartDashboard.putNumber("DriveStraight currentSpeed", currentSpeed);
-        SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
-        SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
-        SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
+        SmartDashboard.putNumber("DriveStraight Target distance", m_DistanceToExceed);
+        SmartDashboard.putNumber("DriveStraightFaster_distanceSoFar", distanceSoFar );
+        SmartDashboard.putNumber("DriveStraightFaster_targetSpeed", targetSpeed);
+        SmartDashboard.putNumber("DriveStraightFaster_currentSpeed", currentSpeed);
+        SmartDashboard.putNumber("DriveStraightFaster_forwardPower", forwardPower);
+        SmartDashboard.putNumber("DriveStraightFaster_angleRightNow", angleRightNow);
+        SmartDashboard.putNumber("DriveStraightFaster_turnPower", turnPower);
         
     }
 
@@ -154,10 +155,10 @@ public class DriveTrainMoveStraightFaster  extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        SmartDashboard.putNumber("Target distance", m_DistanceToExceed);
-        SmartDashboard.putNumber("Straight Tolerance", m_StraightTolerance);
+        SmartDashboard.putNumber("Target_distance", m_DistanceToExceed);
+        SmartDashboard.putNumber("Straight_Tolerance", m_StraightTolerance);
             
-        SmartDashboard.putNumber("Average Distance", m_LineSource.getDistance());
+        SmartDashboard.putNumber("Average_Distance", m_LineSource.getDistance());
         SmartDashboard.putNumber("Target", Math.abs(m_DistanceToExceed - m_StraightTolerance));
     
         boolean didExceedDistance = false;
