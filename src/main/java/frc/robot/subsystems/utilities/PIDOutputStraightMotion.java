@@ -64,14 +64,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 			return rotationPower;
 		}
 
-		protected synchronized double getRotationPower() 
-		{
+		protected synchronized double getRotationPower(){
 			return rotationPower;
 		}
 
 
-		protected synchronized void setRotationPower(double rotationPower) 
-		{
+		protected synchronized void setRotationPower(double rotationPower) {
 			this.rotationPower = rotationPower;
 		}
 

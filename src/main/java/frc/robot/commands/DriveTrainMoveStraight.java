@@ -100,36 +100,37 @@ public class DriveTrainMoveStraight extends CommandBase {
     @Override
     public void initialize() {
 	{
-            m_LineSource.reset();
+        m_LineSource.reset();
 			
-			double start = 0;
+		double start = 0;
 			
-			double convertedDistance = m_distance;	// Inches
-			double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
-			double convertedRamp = m_ramp;			// Inches/Second
+		double convertedDistance = m_distance;	// Inches
+		double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
+		double convertedRamp = m_ramp;			// Inches/Second
 			
-//			if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
-//			{
-                // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
-				m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
+//		if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
+//		{
+        // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
+		m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
 
-                // FORWARD POWER, will have two parts, a guess of the motor power needed plus PID control to try and get to actaul speed requesting
-                // so 20% min power to move (deadzone)
-                // assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
-                m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
+        // FORWARD POWER, will have two parts, a guess of the motor power needed plus PID control to try and get to actaul speed requesting
+        // so 20% min power to move (deadzone)
+        // assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
+        m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
 
-                //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
-                m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(
-                    convertedDistance
-                    +(convertedDistance/java.lang.Math.abs(convertedDistance)*m_StraightTolerance)
-                     ,convertedRamp, convertedSpeed, 
-				                                                                                 start, m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
-				//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
-				m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
-				m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
-//			}
-    	}
+        //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
+        m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(
+                                                        convertedDistance +(convertedDistance/java.lang.Math.abs(convertedDistance))*m_StraightTolerance// the divide by abs is to get the sign correct 
+                                                        ,convertedRamp
+                                                        ,convertedSpeed
+                                                        ,start
+                                                        ,m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
+		//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
+		m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
+		m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
+//		}
     }
+}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
