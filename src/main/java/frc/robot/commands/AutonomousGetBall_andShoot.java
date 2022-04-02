@@ -68,7 +68,6 @@ public class AutonomousGetBall_andShoot extends SequentialCommandGroup {
     new IntakeMove(theIntake),
     new ConveyorMove(theConveyor)).withTimeout(5);
 addCommands(spinAndShootAndintake);
-
-    }
+    } 
 
 }

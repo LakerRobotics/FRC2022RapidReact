@@ -129,6 +129,9 @@ final JoystickButton intakeMovePower = new JoystickButton(operatorController, Xb
 intakeMovePower.whileHeld(new IntakeMove( m_intake ) ,true);
     SmartDashboard.putData("IntakeMovePower",new IntakeMove( m_intake ) );
 
+final JoystickButton intakeMovePowerBackwards = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
+intakeMovePowerBackwards.whileHeld(new IntakeMoveBackwards( m_intake ) ,true);
+
 // CONVEYOR
 //   Operator Controller
 final JoystickButton conveyorMovePower = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);        

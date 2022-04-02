@@ -105,8 +105,15 @@ private CANSparkMax intakeSpark;
     public void periodic() {
         // This method will be called once per scheduler run
         double rumblePower = m_encoder.getVelocity()/maxRPM;
-        RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kLeftRumble,rumblePower);
-        RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kLeftRumble,rumblePower);
+        if (rumblePower < 0){
+            //Running reverse, no rumble
+        }
+        else {
+            RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kLeftRumble,rumblePower);
+            RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kLeftRumble,rumblePower);
+        }
+        
+    
     }
 
     @Override
